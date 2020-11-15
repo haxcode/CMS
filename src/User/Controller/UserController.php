@@ -5,15 +5,23 @@ namespace App\User\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use App\User\Entity\User;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class UserController extends AbstractController {
 
     /**
-     * @Route("/user", name="user list")
+     * @Route("/api/users", name="users_list")
      */
-    public function listUsers(): Response {
+    public function listUsers(Request $request): JsonResponse {
 
-        return new Response('<html><body><h1>Users List</h1></body></html>');
+        /** @var User[] $users */
+        $users = $this->getDoctrine()->getRepository(User::class)->findAll();
+
+
+        return $this->json($users, Response::HTTP_OK);
+
     }
 
 }

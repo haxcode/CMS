@@ -17,6 +17,18 @@ class UserFixtures extends Fixture {
 
     public function load(ObjectManager $manager) {
         $user = new User();
+        $user->setEmail('admin@local');
+        $user->setFirstName('Administrator');
+        $user->setLastName('Systemu');
+        $user->setApiToken('REAL');
+        $user->setPassword($this->passwordEncoder->encodePassword($user, '123qwe'));
+        $manager->persist($user);
+
+        $user = new User();
+        $user->setEmail('user@local');
+        $user->setFirstName('Użytkownik');
+        $user->setLastName('Systemu');
+        $user->setApiToken('FAIL');
         $user->setPassword($this->passwordEncoder->encodePassword($user, '123qwe'));
         $manager->persist($user);
         $manager->flush();
