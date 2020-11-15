@@ -14,50 +14,43 @@ use Symfony\Component\Serializer\Annotation\Ignore;
 class User implements UserInterface {
 
     /**
+     * @Ignore()
+     */
+    protected string $salt;
+    /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
     private int $id;
-
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      */
     private string $email;
-
     /**
      * @ORM\Column(type="json")
      */
     private array $roles = [];
-
     /**
      * @ORM\Column(type="string", length=250, unique=true, name="api_token")
      *
      */
     private string $apiToken;
-
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
      * @Ignore()
      */
     private string $password;
-
     /**
      * @ORM\Column(type="string")
      *
      */
     private string $firstName;
-
     /**
      * @ORM\Column(type="string")
      */
     private string $lastName;
-
-    /**
-     * @Ignore()
-     */
-    protected string $salt;
 
     public function getId(): ?int {
         return $this->id;
