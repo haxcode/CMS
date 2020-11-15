@@ -33,7 +33,7 @@ class User implements UserInterface {
     private array $roles = [];
     /**
      * @ORM\Column(type="string", length=250, unique=true, name="api_token")
-     *
+     * @Ignore()
      */
     private string $apiToken;
     /**
