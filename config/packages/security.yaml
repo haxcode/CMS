@@ -15,10 +15,12 @@ security:
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js)/
       security: false
-    main:
+    api:
+      pattern: ^/api
       lazy: true
       custom_authenticators:
         - App\User\Security\ApiAuthenticator
+      stateless: true
 
   access_control:
     - { path: ^/api/login, roles: PUBLIC_ACCESS }
