@@ -20,7 +20,6 @@ class UserFixtures extends Fixture {
         $user->setEmail('admin@local');
         $user->setFirstName('Administrator');
         $user->setLastName('Systemu');
-        $user->setApiToken('REAL');
         $user->setPassword($this->passwordEncoder->encodePassword($user, '123qwe'));
         $manager->persist($user);
 
@@ -28,7 +27,6 @@ class UserFixtures extends Fixture {
         $user->setEmail('user@local');
         $user->setFirstName('Użytkownik');
         $user->setLastName('Systemu');
-        $user->setApiToken('FAIL');
         $user->setPassword($this->passwordEncoder->encodePassword($user, '123qwe'));
         $manager->persist($user);
         $manager->flush();

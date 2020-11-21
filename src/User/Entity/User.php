@@ -6,6 +6,7 @@ use App\User\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Ignore;
+use Doctrine\ORM\Mapping\OneToMany;
 
 /**
  * @ORM\Entity(repositoryClass="App\User\Repository\UserRepository", repositoryClass=UserRepository::class)
@@ -32,10 +33,11 @@ class User implements UserInterface {
      */
     private array $roles = [];
     /**
-     * @ORM\Column(type="string", length=250, unique=true, name="api_token")
+     * @OneToMany(targetEntity="App\User\Entity\AuthToken", mappedBy="userId")
      * @Ignore()
+     * @ArrayCollection AuthToken
      */
-    private string $apiToken;
+    private array $apiTokens;
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
@@ -153,17 +155,10 @@ class User implements UserInterface {
     }
 
     /**
-     * @return string
+     * @return AuthToken[]
      */
-    public function getApiToken(): string {
-        return $this->apiToken;
-    }
-
-    /**
-     * @param string $apiToken
-     */
-    public function setApiToken(string $apiToken): void {
-        $this->apiToken = $apiToken;
+    public function getApiTokens(): array {
+        return $this->apiTokens;
     }
 
 }
