@@ -68,7 +68,7 @@ class User implements UserInterface {
     /**
      * @param string $email
      *
-     * @return $this
+     * @return void
      */
     public function setEmail(string $email): void {
         $this->email = $email;
@@ -113,6 +113,8 @@ class User implements UserInterface {
 
     /**
      * @see UserInterface
+     *
+     * @return void
      */
     public function getSalt() {
         // not needed when using the "bcrypt" algorithm in security.yaml
@@ -120,6 +122,8 @@ class User implements UserInterface {
 
     /**
      * @see UserInterface
+     *
+     * @return void
      */
     public function eraseCredentials() {
         // If you store any temporary, sensitive data on the user, clear it here

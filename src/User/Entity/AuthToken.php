@@ -109,7 +109,7 @@ class AuthToken {
         return $this->resource;
     }
 
-    public function setResource(?array $resource) {
+    public function setResource(?array $resource): void {
         $this->resource = $resource;
     }
 
