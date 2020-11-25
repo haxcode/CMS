@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Ignore;
 use Doctrine\ORM\Mapping\OneToMany;
+use Doctrine\ORM\PersistentCollection;
 
 /**
  * @ORM\Entity(repositoryClass="App\User\Repository\UserRepository", repositoryClass=UserRepository::class)
@@ -35,9 +36,8 @@ class User implements UserInterface {
     /**
      * @OneToMany(targetEntity="App\User\Entity\AuthToken", mappedBy="userId")
      * @Ignore()
-     * @ArrayCollection AuthToken
      */
-    private array $apiTokens;
+    private PersistentCollection $apiTokens;
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
@@ -155,10 +155,14 @@ class User implements UserInterface {
     }
 
     /**
-     * @return AuthToken[]
+     * @return PersistentCollection
      */
-    public function getApiTokens(): array {
+    public function getApiTokens(): PersistentCollection {
         return $this->apiTokens;
+    }
+
+    public function canAuthorize($password): bool {
+//        $this->getPassword()
     }
 
 }

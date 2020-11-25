@@ -16,7 +16,11 @@ use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPasspor
 
 class ApiAuthenticator extends AbstractAuthenticator {
 
-    private $entityManager;
+    private const AUTH_SUFFIX = 'Bearer ';
+    /**
+     * @var EntityManagerInterface
+     */
+    private EntityManagerInterface $entityManager;
 
     public function __construct(EntityManagerInterface $entityManager) {
         $this->entityManager = $entityManager;
@@ -28,20 +32,21 @@ class ApiAuthenticator extends AbstractAuthenticator {
      * to be skipped.
      */
     public function supports(Request $request): ?bool {
-        return $request->headers->has('X-AUTH-TOKEN');
+        return $request->headers->has('Authorization');
     }
 
     public function authenticate(Request $request): PassportInterface {
-        $apiToken = $request->headers->get('X-AUTH-TOKEN');
-        if (NULL === $apiToken) {
+        $apiToken = $request->headers->get('Authorization');
+        if (NULL === $apiToken || !str_contains($apiToken, self::AUTH_SUFFIX)) {
             // The token header was empty, authentication fails with HTTP Status
             // Code 401 "Unauthorized"
             throw new CustomUserMessageAuthenticationException('No API token provided');
         }
+        $apiToken = str_replace(self::AUTH_SUFFIX, '', $apiToken);
 
-        $user = $this->entityManager->getRepository(User::class)->findOneBy(['apiToken' => $apiToken]);
+        $user = $this->entityManager->getRepository(User::class)->findByToken($apiToken);
         if (NULL === $user) {
-            throw new CustomUserMessageAuthenticationException('Unauthorize access');
+            throw new CustomUserMessageAuthenticationException('Unauthorized access');
         }
 
         return new SelfValidatingPassport($user);

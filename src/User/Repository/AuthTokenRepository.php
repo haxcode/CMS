@@ -18,4 +18,9 @@ class AuthTokenRepository extends ServiceEntityRepository {
         parent::__construct($registry, AuthToken::class);
     }
 
+    public function create(AuthToken $authToken): void {
+        $this->_em->persist($authToken);
+        $this->_em->flush();
+    }
+
 }
