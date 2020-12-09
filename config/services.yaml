@@ -6,6 +6,13 @@
 parameters:
 
 services:
+    _instanceof:
+        App\Common\CQRS\CommandHandler:
+            tags:
+                - { name: messenger.message_handler, bus: command.bus }
+        App\Common\CQRS\QueryHandler:
+            tags:
+                - { name: messenger.message_handler, bus: query.bus }
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
