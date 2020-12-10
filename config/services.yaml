@@ -36,6 +36,9 @@ services:
     App\User\Controller\:
         resource: '../src/User/Controller/'
         tags: ['controller.service_arguments']
+    App\Helpdesk\UI\Controller\:
+        resource: '../src/Helpdesk/UI/Controller/'
+        tags: [ 'controller.service_arguments' ]
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
