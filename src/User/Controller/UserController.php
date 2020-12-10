@@ -10,8 +10,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use App\User\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-//use FOS\RestBundle\Controller\AbstractFOSRestController;
-
 class UserController extends AbstractController {
 
     /**

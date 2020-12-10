@@ -126,6 +126,9 @@
             "./config/packages/fos_rest.yaml"
         ]
     },
+    "harmbandstra/swagger-ui-bundle": {
+        "version": "4.3.0"
+    },
     "laminas/laminas-code": {
         "version": "3.5.0"
     },
@@ -185,6 +188,9 @@
         "files": [
             "./config/packages/sensio_framework_extra.yaml"
         ]
+    },
+    "swagger-api/swagger-ui": {
+        "version": "v3.37.2"
     },
     "symfony/amqp-messenger": {
         "version": "v5.1.9"
@@ -478,5 +484,8 @@
     },
     "willdurand/negotiation": {
         "version": "v2.3.1"
+    },
+    "zircote/swagger-php": {
+        "version": "3.1.0"
     }
 }

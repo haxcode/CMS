@@ -1,3 +1,7 @@
+controllers_helpdesk:
+    resource: ../../src/Helpdesk/UI/Controller/
+    type: annotation
+
 controllers_user:
     resource: ../../src/User/Controller/
     type: annotation
