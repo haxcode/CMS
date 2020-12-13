@@ -2,16 +2,19 @@
 
 namespace App\Client\Application\Command;
 
-final class CreateClient {
+use App\Common\CQRS\Command;
+use App\Client\Domain\ValueObject\NIP;
+
+final class CreateClient implements Command {
 
     private string  $name;
-    private string  $nip;
+    private NIP     $nip;
     private ?string $shortName;
     private bool    $sla;
 
     public function __construct(string $nip, string $name, ?string $shortName, bool $sla = FALSE) {
         $this->name = $name;
-        $this->nip = $nip;
+        $this->nip = NIP::create($nip);
         $this->shortName = $shortName;
         $this->sla = $sla;
     }
@@ -21,9 +24,9 @@ final class CreateClient {
     }
 
     /**
-     * @return string
+     * @return NIP
      */
-    public function getNip(): string {
+    public function getNip(): NIP {
         return $this->nip;
     }
 

@@ -5,6 +5,7 @@ namespace App\Client\Domain\Entity;
 use App\Client\Infrastructure\Repository\ClientRepository;
 use Doctrine\ORM\Mapping as ORM;
 use App\Common\UUID;
+use App\Client\Domain\ValueObject\NIP;
 
 /**
  * @ORM\Entity(repositoryClass=ClientRepository::class)
@@ -31,9 +32,9 @@ class Client {
 
     /**
      * @ORM\Column(type="string")
-     * @var string
+     * @var NIP
      */
-    private string $nip;
+    private NIP $nip;
 
     /**
      * @ORM\Column(type="boolean")
@@ -45,12 +46,12 @@ class Client {
      * Client constructor.
      *
      * @param UUID        $id
-     * @param string      $nip
+     * @param NIP         $nip
      * @param string      $name
      * @param string|null $shortName
      * @param bool        $sla
      */
-    public function __construct(UUID $id, string $nip, string $name, ?string $shortName, bool $sla = FALSE) {
+    public function __construct(UUID $id, NIP $nip, string $name, ?string $shortName, bool $sla = FALSE) {
 
         $this->id = $id;
         $this->nip = $nip;
