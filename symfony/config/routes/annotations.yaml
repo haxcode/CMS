@@ -1,0 +1,12 @@
+helpdesk_issue_create:
+  path: /api/helpdesk/issue
+  controller: App\Helpdesk\UI\Controller\CreateIssuesController
+  methods: POST
+
+controllers_user:
+  resource: ../../src/User/Controller/
+  type: annotation
+
+kernel:
+  resource: ../../src/Kernel.php
+  type: annotation

@@ -1,0 +1,15 @@
+{
+    "openapi": "3.0.0",
+    "paths": {
+        "/api/helpdesk/issue": {
+            "post": {
+                "operationId": "App\\Helpdesk\\UI\\Controller\\CreateIssuesController::__invoke",
+                "responses": {
+                    "200": {
+                        "description": "An example resource"
+                    }
+                }
+            }
+        }
+    }
+}
