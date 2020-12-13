@@ -10,7 +10,6 @@ use App\Helpdesk\Application\Command\CreateIssue;
 use App\Common\CQRS\QueryBus;
 use App\Common\CQRS\CommandBus;
 use App\Helpdesk\Domain\ValueObject\Importance;
-use App\User\Entity\User;
 use Symfony\Component\Routing\Annotation\Route;
 
 class IssuesController extends AbstractController {
@@ -49,13 +48,11 @@ class IssuesController extends AbstractController {
         if (!Importance::isValid($importance)) {
             return $this->json(['error' => 'Issue "importance" must be provided as one of the values from dictionary'], Response::HTTP_BAD_REQUEST);
         }
-
-        if (isset($data['confidential']) && !is_bool($data['confidential'])) {
-            return $this->json(['error' => 'Issue "confidential" must be provided as one of the values from dictionary'], Response::HTTP_BAD_REQUEST);
+        $confidential = FALSE;
+        if (isset($data['confidential']) && is_bool($data['confidential'])) {
+            $confidential = $data['confidential'];
         }
-        $confidential = $data['confidential'] ?? FALSE;
 
-        /** @var  User $this- >getUser() */
         $userID = $this->getUser()->getId();
         $command = new CreateIssue($data['title'], $data['description'], $importance, $confidential, $userID, $data['client']);
         $this->commandBus->dispatch($command);
