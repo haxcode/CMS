@@ -59,6 +59,9 @@ class Client {
         $this->sla = $sla;
     }
 
+    /**
+     * @return UUID
+     */
     public function getId(): UUID {
         return $this->id;
     }

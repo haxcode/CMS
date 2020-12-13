@@ -2,21 +2,19 @@
 
 namespace App\Client\Infrastructure\Repository;
 
-
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Client\Domain\Entity\Client;
 
 /**
- * @method Client|null find($id, $lockMode = null, $lockVersion = null)
- * @method Client|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Client|null find($id, $lockMode = NULL, $lockVersion = NULL)
+ * @method Client|null findOneBy(array $criteria, array $orderBy = NULL)
  * @method Client[]    findAll()
- * @method Client[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Client[]    findBy(array $criteria, array $orderBy = NULL, $limit = NULL, $offset = NULL)
  */
-class ClientRepository extends ServiceEntityRepository
-{
-    public function __construct(ManagerRegistry $registry)
-    {
+class ClientRepository extends ServiceEntityRepository {
+
+    public function __construct(ManagerRegistry $registry) {
         parent::__construct($registry, Client::class);
     }
 
@@ -48,4 +46,9 @@ class ClientRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function create(Client $client): void {
+        $this->_em->persist($client);
+        $this->_em->flush();
+    }
+
 }
