@@ -24,7 +24,7 @@ class IssuesController extends AbstractController {
     }
 
     /**
-     * @Route(path="/api/helpdesk/issue",methods={"POST"},name="helpdesk_issue_create")
+     * @Route(path="/api/helpdesk/issues",methods={"POST"},name="helpdesk_issue_create")
      * @param Request $request
      *
      * @return JsonResponse

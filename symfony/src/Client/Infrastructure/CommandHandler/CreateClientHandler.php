@@ -7,6 +7,7 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use App\Client\Infrastructure\Repository\ClientRepository;
 use App\Client\Domain\Entity\Client;
 use App\Common\UUID;
+use App\Client\Domain\Exception\ClientWithThisNIPAlreadyExist;
 
 final class CreateClientHandler implements MessageHandlerInterface {
 
@@ -24,9 +25,14 @@ final class CreateClientHandler implements MessageHandlerInterface {
      */
     public function __invoke(CreateClient $command) {
 
-        $client = new Client(UUID::random(), $command->getNip(), $command->getName(), $command->getShortName(), $command->isSla());
+        if ($this->repository->findByNIP($command->getNip()) !== NULL) {
+            throw new ClientWithThisNIPAlreadyExist();
+        }
+
+        $client = new Client($command->getId(), $command->getNip(), $command->getName(), $command->getShortName(), $command->isSla());
+
         $this->repository->create($client);
-        
+
     }
 
 }

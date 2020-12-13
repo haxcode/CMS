@@ -4,6 +4,8 @@ namespace App\Client\Application\Command;
 
 use App\Common\CQRS\Command;
 use App\Client\Domain\ValueObject\NIP;
+use App\Client\Domain\Exception\NotValidNIP;
+use App\Common\UUID;
 
 final class CreateClient implements Command {
 
@@ -11,8 +13,23 @@ final class CreateClient implements Command {
     private NIP     $nip;
     private ?string $shortName;
     private bool    $sla;
+    /**
+     * @var UUID
+     */
+    private UUID $id;
 
+    /**
+     * CreateClient constructor.
+     *
+     * @param string      $nip
+     * @param string      $name
+     * @param string|null $shortName
+     * @param bool        $sla
+     *
+     * @throws NotValidNIP
+     */
     public function __construct(string $nip, string $name, ?string $shortName, bool $sla = FALSE) {
+        $this->id = UUID::random();
         $this->name = $name;
         $this->nip = NIP::create($nip);
         $this->shortName = $shortName;
@@ -42,6 +59,13 @@ final class CreateClient implements Command {
      */
     public function isSla(): bool {
         return $this->sla;
+    }
+
+    /**
+     * @return UUID
+     */
+    public function getId(): UUID {
+        return $this->id;
     }
 
 }

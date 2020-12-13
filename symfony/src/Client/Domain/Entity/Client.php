@@ -14,7 +14,7 @@ class Client {
 
     /**
      * @ORM\Id
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", unique=true)
      */
     private UUID $id;
 
@@ -65,6 +65,13 @@ class Client {
      */
     public function getId(): UUID {
         return $this->id;
+    }
+
+    /**
+     * @param string $id
+     */
+    public function setId(string $id): void {
+        $this->id = new UUID($id);
     }
 
     /**

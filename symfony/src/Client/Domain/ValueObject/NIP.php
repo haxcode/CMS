@@ -24,6 +24,8 @@ class NIP implements Stringable {
      * NIP constructor.
      *
      * @param string $nip
+     *
+     * @throws NotValidNIP
      */
     public function __construct(string $nip) {
         $this->setNIP($nip);
@@ -33,6 +35,7 @@ class NIP implements Stringable {
      * @param string $nip
      *
      * @return NIP
+     * @throws NotValidNIP
      */
     public static function create(string $nip): NIP {
         $nipWithoutDashes = preg_replace('/-/', '', $nip);

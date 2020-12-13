@@ -3,19 +3,13 @@
 namespace App\Common;
 
 use Symfony\Component\Uid\Uuid as UID;
+use Stringable;
+use Symfony\Component\Uid\AbstractUid;
 
-/**
- * Class UUID
- *
- * @package          App\Common
- * @createDate       2020-12-10
- * @author           Robert Kubica <rkubica@edokumenty.eu>
- * @copyright (c)    eDokumenty Sp. z o.o.
- */
-final class UUID {
+final class UUID implements Stringable {
 
     /**
-     * @var string|\Symfony\Component\Uid\AbstractUid|UID
+     * @var string|AbstractUid|UID
      */
     private string $value;
 

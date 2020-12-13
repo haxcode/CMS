@@ -121,7 +121,7 @@ class AuthToken {
     }
 
     /**
-     * @param UUID $parent_id
+     * @param UUID|null $parent_id
      */
     public function setParentId(?UUID $parent_id = NULL): void {
         $this->parent_id = $parent_id;

@@ -10,6 +10,9 @@ use App\Common\CQRS\QueryBus;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use App\Client\Application\Command\CreateClient;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
+use App\Client\Domain\Exception\NotValidNIP;
+use App\Client\Application\Query\ClientsList;
 
 class ClientController extends AbstractController {
 
@@ -28,8 +31,10 @@ class ClientController extends AbstractController {
     }
 
     /**
-     * @Route(path="/api/client", methods={"POST"}, name="client_create")
+     * @Route(path="/api/clients", methods={"POST"}, name="client_create")
      * @param Request $request
+     *
+     * @return JsonResponse
      */
     public function create(Request $request): JsonResponse {
 
@@ -51,11 +56,33 @@ class ClientController extends AbstractController {
         if (isset($data['sla']) && is_bool($data['sla'])) {
             $sla = $data['sla'];
         }
+        try {
+            $createClient = new CreateClient($data['nip'], $data['name'], $data['short_name'], $sla);
+        } catch (NotValidNIP $e) {
+            return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
 
-        $createClient = new CreateClient($data['nip'], $data['name'], $data['short_name'], $sla);
-        $this->commandBus->dispatch($createClient);
+        try {
+            $this->commandBus->dispatch($createClient);
+        } catch (HandlerFailedException $exception) {
+            return $this->json(['error' => $exception->getNestedExceptions()[0]->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
 
-        return $this->json([], Response::HTTP_CREATED);
+        return $this->json(['client_id' => (string)$createClient->getId()], Response::HTTP_CREATED);
+    }
+
+    /**
+     * @Route(path="/api/clients", methods={"GET"}, name="client_list")
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function list(Request $request): JsonResponse {
+
+        $query = new ClientsList();
+        $data = $this->queryBus->handle($query);
+
+        return $this->json(['data' => $data], Response::HTTP_CREATED);
     }
 
 }
