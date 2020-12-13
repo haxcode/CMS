@@ -15,3 +15,4 @@ framework:
             async: '%env(MESSENGER_TRANSPORT_DSN)%'
 
         routing:
+            App\Helpdesk\Application\Command\CreateIssue: sync

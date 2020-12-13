@@ -1,7 +1,6 @@
 helpdesk_issue_create:
-  path: /api/helpdesk/issue
-  controller: App\Helpdesk\UI\Controller\CreateIssuesController
-  methods: POST
+  resource: ../../src/Helpdesk/UI/Controller/
+  type: annotation
 
 controllers_user:
   resource: ../../src/User/Controller/

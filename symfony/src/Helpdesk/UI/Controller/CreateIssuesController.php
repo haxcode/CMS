@@ -11,6 +11,7 @@ use App\Common\CQRS\QueryBus;
 use App\Common\CQRS\CommandBus;
 use App\Helpdesk\Domain\ValueObject\Importance;
 use App\User\Entity\User;
+use Symfony\Component\Routing\Annotation\Route;
 
 class CreateIssuesController extends AbstractController {
 
@@ -23,31 +24,29 @@ class CreateIssuesController extends AbstractController {
     }
 
     /**
+     * @Route(path="/api/helpdesk/issue",methods={"POST"},name="helpdesk_issue_create")
      * @param Request $request
      *
      * @return JsonResponse
      */
     public function __invoke(Request $request): Response {
-        $data = json_decode($request->getContent(), TRUE);
-        return $this->json($data);
-        if (!isset($data['title']) || is_string($data['title']) || empty($data['title'])) {
+        $data = json_decode($request->getContent(), true);
+       
+        if (!isset($data['title']) || !is_string($data['title']) || empty($data['title'])) {
             return $this->json(['error' => 'Issue "title" must be provided as text'], Response::HTTP_BAD_REQUEST);
         }
 
-        if (!isset($data['description']) || is_string($data['description']) || empty($data['description'])) {
+        if (!isset($data['description']) || !is_string($data['description']) || empty($data['description'])) {
             return $this->json(['error' => 'Issue "description" must be provided as text'], Response::HTTP_BAD_REQUEST);
         }
-
-        if (!isset($data['description']) || is_string($data['description']) || empty($data['description'])) {
-            return $this->json(['error' => 'Issue "description" must be provided as text'], Response::HTTP_BAD_REQUEST);
-        }
-        if (!isset($data['client']) || is_string($data['client']) || empty($data['client'])) {
+        
+        if (!isset($data['client']) || !is_string($data['client']) || empty($data['client'])) {
             return $this->json(['error' => 'Issue "client" must be provided as text'], Response::HTTP_BAD_REQUEST);
         }
 
-        $importnce = $data['importance'] ?? Importance::NORMALLY;
+        $importance = $data['importance'] ?? Importance::NORMALLY;
 
-        if (!Importance::isValid($importnce)) {
+        if (!Importance::isValid($importance)) {
             return $this->json(['error' => 'Issue "importance" must be provided as one of the values from dictionary'], Response::HTTP_BAD_REQUEST);
         }
 
@@ -58,7 +57,7 @@ class CreateIssuesController extends AbstractController {
 
         /** @var  User $this- >getUser() */
         $userID = $this->getUser()->getId();
-        $command = new CreateIssue($data['title'], $data['description'], $importnce, $confidential, $userID, $data['client']);
+        $command = new CreateIssue($data['title'], $data['description'], $importance, $confidential, $userID, $data['client']);
         $this->commandBus->dispatch($command);
 
         return $this->json(['data' => $data]);

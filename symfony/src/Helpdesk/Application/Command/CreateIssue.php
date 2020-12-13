@@ -12,7 +12,7 @@ use App\Common\CQRS\Command;
  * @author           Robert Kubica <rkubica@edokumenty.eu>
  * @copyright (c)    eDokumenty Sp. z o.o.
  */
-class CreateIssue implements Command {
+final class CreateIssue implements Command {
 
     private string  $title;
     private string  $description;
