@@ -1,10 +1,15 @@
-helpdesk_issue_create:
+helpdesk_issue_controller:
   resource: ../../src/Helpdesk/UI/Controller/
   type: annotation
 
-controllers_user:
+client_controller:
+  resource: ../../src/Client/UI/Controller/
+  type: annotation
+
+user_controllers:
   resource: ../../src/User/Controller/
   type: annotation
+
 
 kernel:
   resource: ../../src/Kernel.php

@@ -13,7 +13,7 @@ use App\Helpdesk\Domain\ValueObject\Importance;
 use App\User\Entity\User;
 use Symfony\Component\Routing\Annotation\Route;
 
-class CreateIssuesController extends AbstractController {
+class IssuesController extends AbstractController {
 
     private QueryBus   $queryBus;
     private CommandBus $commandBus;
@@ -29,9 +29,9 @@ class CreateIssuesController extends AbstractController {
      *
      * @return JsonResponse
      */
-    public function __invoke(Request $request): Response {
-        $data = json_decode($request->getContent(), true);
-       
+    public function create(Request $request): JsonResponse {
+        $data = json_decode($request->getContent(), TRUE);
+
         if (!isset($data['title']) || !is_string($data['title']) || empty($data['title'])) {
             return $this->json(['error' => 'Issue "title" must be provided as text'], Response::HTTP_BAD_REQUEST);
         }
@@ -39,7 +39,7 @@ class CreateIssuesController extends AbstractController {
         if (!isset($data['description']) || !is_string($data['description']) || empty($data['description'])) {
             return $this->json(['error' => 'Issue "description" must be provided as text'], Response::HTTP_BAD_REQUEST);
         }
-        
+
         if (!isset($data['client']) || !is_string($data['client']) || empty($data['client'])) {
             return $this->json(['error' => 'Issue "client" must be provided as text'], Response::HTTP_BAD_REQUEST);
         }
