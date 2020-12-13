@@ -4,14 +4,7 @@ namespace App\Helpdesk\Application\Command;
 
 use App\Common\CQRS\Command;
 
-/**
- * Class CreateIssue
- *
- * @package          App\Helpdesk\Application\Command
- * @createDate       2020-12-10
- * @author           Robert Kubica <rkubica@edokumenty.eu>
- * @copyright (c)    eDokumenty Sp. z o.o.
- */
+
 final class CreateIssue implements Command {
 
     private string  $title;
@@ -19,7 +12,7 @@ final class CreateIssue implements Command {
     private int     $author;
     private ?string $client;
     private string  $importance;
-    private string  $confidential;
+    private bool    $confidential;
 
     /**
      * CreateIssue constructor.
@@ -27,11 +20,11 @@ final class CreateIssue implements Command {
      * @param string      $title
      * @param string      $description
      * @param string      $importance
-     * @param string      $confidential
+     * @param bool        $confidential
      * @param int         $author
      * @param string|null $client
      */
-    public function __construct(string $title, string $description, string $importance, string $confidential, int $author, ?string $client) {
+    public function __construct(string $title, string $description, string $importance, bool $confidential, int $author, ?string $client) {
 
         $this->title = $title;
         $this->description = $description;
@@ -39,6 +32,48 @@ final class CreateIssue implements Command {
         $this->author = $author;
         $this->importance = $importance;
         $this->confidential = $confidential;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle(): string {
+        return $this->title;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription(): string {
+        return $this->description;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAuthor(): int {
+        return $this->author;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getClient(): ?string {
+        return $this->client;
+    }
+
+    /**
+     * @return string
+     */
+    public function getImportance(): string {
+        return $this->importance;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getConfidential(): bool {
+        return $this->confidential;
     }
 
 }

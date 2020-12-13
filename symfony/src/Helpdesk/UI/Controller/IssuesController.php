@@ -57,6 +57,8 @@ class IssuesController extends AbstractController {
         $command = new CreateIssue($data['title'], $data['description'], $importance, $confidential, $userID, $data['client']);
         $this->commandBus->dispatch($command);
 
+        
+
         return $this->json(['data' => $data]);
     }
 
