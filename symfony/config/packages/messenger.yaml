@@ -16,3 +16,4 @@ framework:
 
         routing:
             App\Helpdesk\Application\Command\CreateIssue: sync
+            App\Client\Application\Command\CreateClient: sync
