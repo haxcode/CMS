@@ -6,7 +6,6 @@ use App\Client\Application\Command\CreateClient;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use App\Client\Infrastructure\Repository\ClientRepository;
 use App\Client\Domain\Entity\Client;
-use App\Common\UUID;
 use App\Client\Domain\Exception\ClientWithThisNIPAlreadyExist;
 
 final class CreateClientHandler implements MessageHandlerInterface {
