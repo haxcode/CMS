@@ -77,7 +77,7 @@ class ChangeController extends AbstractController {
     }
 
     /**
-     * @Route(path="/api/dictionary/changes/{uuid}")
+     * @Route(path="/api/dictionary/changes/{uuid}",methods={"PATCH"})
      * @param Request $request
      * @param string  $uuid
      *
@@ -101,6 +101,28 @@ class ChangeController extends AbstractController {
 
         $this->repository->update($change);
         return $this->json(['uuid' => (string)$uuid]);
+    }
+
+    /**
+     * @Route(path="/api/dictionary/changes/{uuid}",methods={"DELETE"})
+     * @param Request $request
+     * @param string  $uuid
+     *
+     * @return JsonResponse
+     */
+    public function deleteChange(Request $request, string $uuid): JsonResponse {
+        if (!Uuid::isValid($uuid)) {
+            $this->json(['error' => 'ID of change is not valid identifier'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $uuid = new Uuid($uuid);
+
+        try {
+            $this->repository->delete($uuid);
+        } catch (\Exception $exception) {
+            return $this->json(['error' => $exception->getMessage()], $exception->getCode());
+        }
+        return new JsonResponse(NULL, 200);
     }
 
 }

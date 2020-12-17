@@ -9,6 +9,7 @@ use Doctrine\ORM\ORMException;
 use App\Dictionary\Entity\Change;
 use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ChangeRepository extends ServiceEntityRepository {
 
@@ -55,6 +56,22 @@ class ChangeRepository extends ServiceEntityRepository {
             return NULL;
 
         return $data;
+    }
+
+    /**
+     * @param Uuid $uuid
+     *
+     * @throws NonUniqueResultException
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function delete(Uuid $uuid):void {
+        $change = $this->get($uuid);
+        if ($change == NULL) {
+            throw new NotFoundHttpException('Change with this uuid was not found', NULL, 404);
+        }
+        $this->_em->remove($change);
+        $this->_em->flush();
     }
 
 }
