@@ -49,16 +49,16 @@ class ChangeController extends AbstractController {
     }
 
     /**
-     * @Route(path="/api/dictionary/changes/{id}",methods={"GET"},name="dictionary_change_read")
+     * @Route(path="/api/dictionary/changes/{uuid}",methods={"GET"},name="dictionary_change_read")
      * @param Request $request
      * @param string  $id
      */
-    public function getChange(Request $request, string $id): JsonResponse {
-        if (!Uuid::isValid($id)) {
+    public function getChange(Request $request, string $uuid): JsonResponse {
+        if (!Uuid::isValid($uuid)) {
             $this->json(['error' => 'ID of change is not valid identifier'], Response::HTTP_BAD_REQUEST);
         }
-        $uuid = new Uuid($id);
-        $entity = $this->repository->read($uuid);
+        $uuid = new Uuid($uuid);
+        $entity = $this->repository->get($uuid);
 
         return $this->json($entity);
     }
@@ -71,11 +71,36 @@ class ChangeController extends AbstractController {
      */
     public function getChangesList(Request $request): JsonResponse {
 
-//        $entity = $this->repository->read();
+        $entities = $this->repository->findAll();
 
-//        return $this->json($entity);
+        return $this->json($entities);
+    }
 
-        return $this->json([]);
+    /**
+     * @Route(path="/api/dictionary/changes/{uuid}")
+     * @param Request $request
+     * @param string  $uuid
+     *
+     * @return JsonResponse
+     */
+    public function updateChange(Request $request, string $uuid): JsonResponse {
+        if (!Uuid::isValid($uuid)) {
+            $this->json(['error' => 'ID of change is not valid identifier'], Response::HTTP_BAD_REQUEST);
+        }
+        $data = json_decode($request->getContent(), TRUE);
+
+        $uuid = new Uuid($uuid);
+        /** @var Change $change */
+        $change = $this->repository->get($uuid);
+        if (isset($data['description']) && is_string($data['description'])) {
+            $change->setDescription($data['description']);
+        }
+        if (isset($data['excerpt']) && is_string($data['description'])) {
+            $change->setExcerpt('description');
+        }
+
+        $this->repository->update($change);
+        return $this->json(['uuid' => (string)$uuid]);
     }
 
 }

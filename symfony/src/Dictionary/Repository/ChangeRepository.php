@@ -49,7 +49,7 @@ class ChangeRepository extends ServiceEntityRepository {
      * @return Change|null
      * @throws NonUniqueResultException
      */
-    public function read(Uuid $id): ?Change {
+    public function get(Uuid $id): ?Change {
         $data = $this->createQueryBuilder('c')->andWhere('c.id = :id')->setParameter('id', pg_escape_string($id))->getQuery()->getOneOrNullResult();
         if ($data == NULL)
             return NULL;
