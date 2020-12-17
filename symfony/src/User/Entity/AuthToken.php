@@ -55,7 +55,7 @@ class AuthToken {
         $this->setCreatedAt();
     }
 
-    public function getId(): UUID {
+    public function getId(): Uuid {
         return $this->id;
     }
 

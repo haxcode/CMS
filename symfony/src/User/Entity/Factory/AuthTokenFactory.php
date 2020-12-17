@@ -20,7 +20,7 @@ class AuthTokenFactory {
     }
 
     public static function createRefreshAuthToken(User $user): AuthToken {
-        $token = new AuthToken(UUID::random());
+        $token = new AuthToken(Uuid::v4());
         $token->setUserId($user->getId());
         $token->setToken(self::generateToken($user->getEmail()));
         $token->setExpireAt((new DateTime())->add(new DateInterval('P1D')));
