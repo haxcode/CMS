@@ -5,13 +5,13 @@ namespace App\User\Entity\Factory;
 use App\User\Entity\User;
 use App\User\Entity\AuthToken;
 use DateInterval;
-use App\Common\UUID;
 use DateTime;
+use Symfony\Component\Uid\Uuid;
 
 class AuthTokenFactory {
 
     public static function createAuthToken(User $user): AuthToken {
-        $token = new AuthToken(UUID::random());
+        $token = new AuthToken(Uuid::v4());
         $token->setUserId($user->getId());
         $token->setToken(self::generateToken($user->getEmail()));
         $token->setExpireAt((new DateTime())->add(new DateInterval('PT1H')));

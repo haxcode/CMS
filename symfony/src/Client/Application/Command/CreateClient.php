@@ -5,7 +5,7 @@ namespace App\Client\Application\Command;
 use App\Common\CQRS\Command;
 use App\Client\Domain\ValueObject\NIP;
 use App\Client\Domain\Exception\NotValidNIP;
-use App\Common\UUID;
+use Symfony\Component\Uid\Uuid;
 
 final class CreateClient implements Command {
 
@@ -14,9 +14,9 @@ final class CreateClient implements Command {
     private ?string $shortName;
     private bool    $sla;
     /**
-     * @var UUID
+     * @var Uuid
      */
-    private UUID $id;
+    private Uuid $id;
 
     /**
      * CreateClient constructor.
@@ -29,7 +29,7 @@ final class CreateClient implements Command {
      * @throws NotValidNIP
      */
     public function __construct(string $nip, string $name, ?string $shortName, bool $sla = FALSE) {
-        $this->id = UUID::random();
+        $this->id = Uuid::v4();
         $this->name = $name;
         $this->nip = NIP::create($nip);
         $this->shortName = $shortName;
@@ -62,9 +62,9 @@ final class CreateClient implements Command {
     }
 
     /**
-     * @return UUID
+     * @return Uuid
      */
-    public function getId(): UUID {
+    public function getId(): Uuid {
         return $this->id;
     }
 

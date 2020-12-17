@@ -6,9 +6,6 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Client\Domain\Entity\Client;
 use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\AbstractQuery;
-use App\Common\UUID;
-use App\Client\Domain\ValueObject\NIP;
 
 /**
  * @method Client|null find($id, $lockMode = NULL, $lockVersion = NULL)
@@ -62,11 +59,11 @@ class ClientRepository extends ServiceEntityRepository {
      * @throws NonUniqueResultException
      */
     public function findByNIP(string $nip): ?Client {
-        $data = $this->createQueryBuilder('c')->andWhere('c.nip = :nip')->setParameter('nip', pg_escape_string($nip))->getQuery()->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
-        if ($data == NULL)
+        $entity = $this->createQueryBuilder('c')->andWhere('c.nip = :nip')->setParameter('nip', pg_escape_string($nip))->getQuery()->getOneOrNullResult();
+        if ($entity == NULL)
             return NULL;
 
-        return new Client(new UUID($data['id']), new NIP($data['nip']), $data['name'], $data['shortName'], $data['sla']);
+        return $entity;
     }
 
 }

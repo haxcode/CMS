@@ -6,9 +6,14 @@ client_controller:
   resource: ../../src/Client/UI/Controller/
   type: annotation
 
+dictionary_controllers:
+  resource: ../../src/Dictionary/Controller/
+  type: annotation
+
 user_controllers:
   resource: ../../src/User/Controller/
   type: annotation
+
 
 
 kernel:

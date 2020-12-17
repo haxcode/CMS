@@ -5,9 +5,9 @@ namespace App\User\Entity;
 use App\User\Repository\AuthTokenRepository;
 use Doctrine\ORM\Mapping as ORM;
 use DateTimeInterface;
-use App\Common\UUID;
 use Symfony\Component\Serializer\Annotation\Ignore;
 use DateTime;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @ORM\Entity(repositoryClass=AuthTokenRepository::class)
@@ -17,14 +17,14 @@ class AuthToken {
 
     /**
      * @ORM\Id
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="uuid")
      */
-    private UUID $id;
+    private Uuid $id;
     /**
-     * @ORM\Column(type="string", nullable=TRUE)
+     * @ORM\Column(type="uuid", nullable=TRUE)
      * @Ignore()
      */
-    private ?UUID $parent_id = NULL;
+    private ?Uuid $parent_id = NULL;
     /**
      * @ORM\Column(type="integer")
      */
@@ -50,7 +50,7 @@ class AuthToken {
      */
     private ?array $resource = [];
 
-    public function __construct(UUID $id) {
+    public function __construct(Uuid $id) {
         $this->id = $id;
         $this->setCreatedAt();
     }
@@ -114,16 +114,16 @@ class AuthToken {
     }
 
     /**
-     * @return ?UUID
+     * @return ?Uuid
      */
-    public function getParentId(): ?UUID {
+    public function getParentId(): ?Uuid {
         return $this->parent_id;
     }
 
     /**
-     * @param UUID|null $parent_id
+     * @param Uuid|null $parent_id
      */
-    public function setParentId(?UUID $parent_id = NULL): void {
+    public function setParentId(?Uuid $parent_id = NULL): void {
         $this->parent_id = $parent_id;
     }
 

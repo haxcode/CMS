@@ -4,8 +4,8 @@ namespace App\Client\Domain\Entity;
 
 use App\Client\Infrastructure\Repository\ClientRepository;
 use Doctrine\ORM\Mapping as ORM;
-use App\Common\UUID;
 use App\Client\Domain\ValueObject\NIP;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @ORM\Entity(repositoryClass=ClientRepository::class)
@@ -14,9 +14,9 @@ class Client {
 
     /**
      * @ORM\Id
-     * @ORM\Column(type="string", unique=true)
+     * @ORM\Column(type="uuid", unique=true)
      */
-    private UUID $id;
+    private Uuid $id;
 
     /**
      * @ORM\Column(type="string")
@@ -45,13 +45,13 @@ class Client {
     /**
      * Client constructor.
      *
-     * @param UUID        $id
+     * @param Uuid        $id
      * @param NIP         $nip
      * @param string      $name
      * @param string|null $shortName
      * @param bool        $sla
      */
-    public function __construct(UUID $id, NIP $nip, string $name, ?string $shortName, bool $sla = FALSE) {
+    public function __construct(Uuid $id, NIP $nip, string $name, ?string $shortName, bool $sla = FALSE) {
 
         $this->id = $id;
         $this->nip = $nip;
@@ -61,9 +61,9 @@ class Client {
     }
 
     /**
-     * @return UUID
+     * @return Uuid
      */
-    public function getId(): UUID {
+    public function getId(): Uuid {
         return $this->id;
     }
 
@@ -71,7 +71,7 @@ class Client {
      * @param string $id
      */
     public function setId(string $id): void {
-        $this->id = new UUID($id);
+        $this->id = new Uuid($id);
     }
 
     /**

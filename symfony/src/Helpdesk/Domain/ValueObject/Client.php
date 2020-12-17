@@ -2,7 +2,8 @@
 
 namespace App\Helpdesk\Domain\ValueObject;
 
-use App\Common\UUID;
+
+use Symfony\Component\Uid\Uuid;
 
 /**
  * Class Client
@@ -15,9 +16,9 @@ use App\Common\UUID;
 class Client {
 
     /**
-     * @var UUID
+     * @var Uuid
      */
-    private UUID $clientID;
+    private Uuid $clientID;
     /**
      * @var bool
      */
@@ -26,10 +27,10 @@ class Client {
     /**
      * Client constructor.
      *
-     * @param UUID $clientID
+     * @param Uuid $clientID
      * @param bool $withSLA
      */
-    public function __construct(UUID $clientID, bool $withSLA = FALSE) {
+    public function __construct(Uuid $clientID, bool $withSLA = FALSE) {
 
         $this->clientID = $clientID;
         $this->withSLA = $withSLA;

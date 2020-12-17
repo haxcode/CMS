@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Dictionary\Change;
+namespace App\Dictionary\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use App\Common\UUID;
+use App\Dictionary\Repository\ChangeRepository;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @ORM\Entity(repositoryClass=ChangeRepository::class)
- * @ORM\Table(name="change")
  */
 class Change {
 
     /**
      * @ORM\Id
-     * @ORM\Column(name="id")
+     * @ORM\Column(name="id",type="uuid", unique=true)
      */
-    private UUID $id;
+    private Uuid $id;
 
     /**
      * @ORM\Column(name="excerpt")
@@ -36,7 +36,7 @@ class Change {
      */
     private bool $released;
 
-    public function __construct(UUID $id, string $excerpt, string $description, string $release = '', bool $released = FALSE) {
+    public function __construct(Uuid $id, string $excerpt, string $description, string $release = '', bool $released = FALSE) {
         $this->id = $id;
         $this->excerpt = $excerpt;
         $this->description = $description;
@@ -45,9 +45,9 @@ class Change {
     }
 
     /**
-     * @return UUID
+     * @return Uuid
      */
-    public function getId(): UUID {
+    public function getId(): Uuid {
         return $this->id;
     }
 

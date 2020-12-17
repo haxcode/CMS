@@ -3,7 +3,7 @@
 namespace App\Helpdesk\Domain\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use App\Common\UUID;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @ORM\Entity(repositoryClass="App\Helpdesk\Infrastructure\Repository\IssueRepository")
@@ -12,14 +12,14 @@ class Issue {
 
     /**
      * @ORM\Id
-     * @ORM\Column(type="string",name="issue_id")
+     * @ORM\Column(type="uuid",name="issue_id")
      */
-    private UUID $issueId;
+    private Uuid $issueId;
 
     /**
-     * @return UUID
+     * @return Uuid
      */
-    public function getIssueId(): UUID {
+    public function getIssueId(): Uuid {
         return $this->issueId;
     }
 
