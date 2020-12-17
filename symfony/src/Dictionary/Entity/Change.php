@@ -58,11 +58,19 @@ class Change {
         return $this->excerpt;
     }
 
+    public function setExcerpt(string $excerpt): void {
+        $this->excerpt = $excerpt;
+    }
+
     /**
      * @return string
      */
     public function getDescription(): string {
         return $this->description;
+    }
+
+    public function setDescription(string $description): void {
+        $this->description = $description;
     }
 
     /**
