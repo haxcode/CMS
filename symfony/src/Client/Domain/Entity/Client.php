@@ -32,9 +32,8 @@ class Client {
 
     /**
      * @ORM\Column(type="string")
-     * @var NIP
      */
-    private NIP $nip;
+    private string $nip;
 
     /**
      * @ORM\Column(type="boolean")
