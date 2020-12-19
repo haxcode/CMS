@@ -8,7 +8,7 @@ class Importance {
 
     public const IMPORTANT = 'IMPORTANT';
     public const NORMALLY = 'NORMALLY';
-    public const CRITICAL = 'IMPORTANT';
+    public const CRITICAL = 'CRITICAL';
 
     public function __construct(string $guid) {
         if (!self::isValid($guid)) {
