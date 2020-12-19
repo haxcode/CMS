@@ -7,6 +7,7 @@ use Symfony\Component\Uid\Uuid;
 use Doctrine\ORM\Mapping\OneToOne;
 use Doctrine\ORM\Mapping\JoinColumn;
 use App\Client\Domain\Entity\Client;
+use App\User\Entity\User;
 
 /**
  * @ORM\Entity(repositoryClass="App\Helpdesk\Infrastructure\Repository\IssueRepository")
@@ -36,9 +37,10 @@ class Issue {
     private string $description;
 
     /**
-     * @ORM\Column(type="bigint",name="usr_id")
+     * @OneToOne(targetEntity="App\User\Entity\User")
+     * @JoinColumn(name="usr_id", referencedColumnName="id")
      */
-    private int $author;
+    private User $author;
 
     /**
      * @ORM\Column(type="string")
@@ -49,6 +51,12 @@ class Issue {
      * @ORM\Column(type="boolean", name="is_confidential")
      */
     private string $confidential;
+
+    /**
+     * @OneToOne(targetEntity="App")
+     * @JoinColumn(name="usr_id", referencedColumnName="id")
+     */
+    private string $component;
 
     /**
      * @return Uuid
