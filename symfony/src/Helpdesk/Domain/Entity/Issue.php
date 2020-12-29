@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping\OneToOne;
 use Doctrine\ORM\Mapping\JoinColumn;
 use App\Client\Domain\Entity\Client;
 use App\User\Entity\User;
+use App\Dictionary\Entity\Component;
 
 /**
  * @ORM\Entity(repositoryClass="App\Helpdesk\Infrastructure\Repository\IssueRepository")
@@ -53,8 +54,8 @@ class Issue {
     private string $confidential;
 
     /**
-     * @OneToOne(targetEntity="App")
-     * @JoinColumn(name="usr_id", referencedColumnName="id")
+     * @OneToOne(targetEntity="App\Dictionary\Entity\Component")
+     * @JoinColumn(name="component_uuid", referencedColumnName="id")
      */
     private string $component;
 

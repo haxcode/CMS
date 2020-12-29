@@ -3,11 +3,11 @@
 namespace App\Dictionary\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use App\Dictionary\Repository\ChangeRepository;
+use App\Dictionary\Repository\ComponentRepository;
 use Symfony\Component\Uid\Uuid;
 
 /**
- * @ORM\Entity(repositoryClass=ChangeRepository::class)
+ * @ORM\Entity(repositoryClass=ComponentRepository::class)
  */
 class Component {
 

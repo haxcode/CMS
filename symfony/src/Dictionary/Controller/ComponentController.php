@@ -30,7 +30,7 @@ class ComponentController extends AbstractController {
     }
 
     /**
-     * @Route(path="/api/dictionary/component",methods={"POST"},name="dictionary_component_create")
+     * @Route(path="/api/dictionary/components",methods={"POST"},name="dictionary_component_create")
      */
     public function create(Request $request): JsonResponse {
         $data = json_decode($request->getContent(), TRUE);
@@ -50,7 +50,7 @@ class ComponentController extends AbstractController {
     }
 
     /**
-     * @Route(path="/api/dictionary/component/{uuid}",methods={"GET"},name="dictionary_component_read")
+     * @Route(path="/api/dictionary/components/{uuid}",methods={"GET"},name="dictionary_component_read")
      * @param Request $request
      * @param string  $uuid
      *
@@ -68,7 +68,7 @@ class ComponentController extends AbstractController {
     }
 
     /**
-     * @Route(path="/api/dictionary/component",methods={"GET"},name="dictionary_component_list")
+     * @Route(path="/api/dictionary/components",methods={"GET"},name="dictionary_component_list")
      * @param Request $request
      *
      * @return JsonResponse
@@ -81,7 +81,7 @@ class ComponentController extends AbstractController {
     }
 
     /**
-     * @Route(path="/api/dictionary/component/{uuid}",methods={"PATCH"})
+     * @Route(path="/api/dictionary/components/{uuid}",methods={"PATCH"})
      * @param Request $request
      * @param string  $uuid
      *
@@ -108,7 +108,7 @@ class ComponentController extends AbstractController {
     }
 
     /**
-     * @Route(path="/api/dictionary/component/{uuid}",methods={"DELETE"})
+     * @Route(path="/api/dictionary/components/{uuid}",methods={"DELETE"})
      * @param Request $request
      * @param string  $uuid
      *

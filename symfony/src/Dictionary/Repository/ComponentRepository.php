@@ -24,39 +24,39 @@ class ComponentRepository extends ServiceEntityRepository {
     }
 
     /**
-     * @param Change $change
+     * @param Component $component
      *
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function create(Component $change): void {
-        $this->_em->persist($change);
+    public function create(Component $component): void {
+        $this->_em->persist($component);
         $this->_em->flush();
     }
 
     /**
-     * @param Component $change
+     * @param Component $component
      *
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function update(Component $change): void {
-        $this->_em->persist($change);
+    public function update(Component $component): void {
+        $this->_em->persist($component);
         $this->_em->flush();
     }
 
     /**
      * @param Uuid $id
      *
-     * @return Change|null
+     * @return Component|null
      * @throws NonUniqueResultException
      */
     public function get(Uuid $id): ?Component {
-        $data = $this->createQueryBuilder('c')->andWhere('c.id = :id')->setParameter('id', pg_escape_string($id))->getQuery()->getOneOrNullResult();
-        if ($data == NULL)
+        $component = $this->createQueryBuilder('c')->andWhere('c.id = :id')->setParameter('id', pg_escape_string($id))->getQuery()->getOneOrNullResult();
+        if ($component == NULL)
             return NULL;
 
-        return $data;
+        return $component;
     }
 
     /**
@@ -67,11 +67,11 @@ class ComponentRepository extends ServiceEntityRepository {
      * @throws OptimisticLockException
      */
     public function delete(Uuid $uuid): void {
-        $change = $this->get($uuid);
-        if ($change == NULL) {
+        $component = $this->get($uuid);
+        if ($component == NULL) {
             throw new NotFoundHttpException('Component with this uuid was not found', NULL, 404);
         }
-        $this->_em->remove($change);
+        $this->_em->remove($component);
         $this->_em->flush();
     }
 

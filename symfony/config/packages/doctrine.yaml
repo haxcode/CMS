@@ -21,15 +21,15 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Client/Domain/Entity'
                 prefix: 'App\Client\Domain\Entity'
                 alias: Client
+            Dictionary:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/Dictionary/Entity'
+                prefix: 'App\Dictionary\Entity'
+                alias: Dictionary
             Helpdesk:
                 is_bundle: false
                 type: annotation
                 dir: '%kernel.project_dir%/src/Helpdesk/Domain/Entity'
                 prefix: 'App\Helpdesk\Domain\Entity'
                 alias: Client
-            Dictionary:
-                is_bundle: false
-                type: annotation
-                dir: '%kernel.project_dir%/src/Helpdesk/Domain/Entity'
-                prefix: 'App\Dictionary\Entity'
-                alias: Dictionary
