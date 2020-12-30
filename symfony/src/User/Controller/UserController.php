@@ -38,7 +38,7 @@ class UserController extends AbstractController {
 
         $user = $repository->find($id);
         if (!$user) {
-            throw $this->createNotFoundException('No user found for id '.$id);
+            return $this->json(['message' => 'No user found for id '.$id], Response::HTTP_NOT_FOUND);
         }
         return $this->json($user, Response::HTTP_OK);
     }
