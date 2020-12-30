@@ -4,9 +4,8 @@ namespace App\Helpdesk\Domain\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
-use Doctrine\ORM\Mapping\OneToOne;
-use Doctrine\ORM\Mapping\JoinColumn;
 use App\Client\Domain\Entity\Client;
+use App\Helpdesk\Domain\ValueObject\Importance;
 
 /**
  * @ORM\Entity(repositoryClass="App\Helpdesk\Infrastructure\Repository\IssueRepository")
@@ -20,8 +19,7 @@ class Issue {
     private Uuid $issueId;
 
     /**
-     * @OneToOne(targetEntity="App\Client\Domain\Entity\Client")
-     * @JoinColumn(name="client_uuid", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="App\Client\Domain\Entity\Client",fetch="EAGER")
      */
     private Client $client;
 
@@ -54,6 +52,19 @@ class Issue {
      * @ORM\Column(type="uuid", name="component_uuid")
      */
     private Uuid $component;
+
+    public function __construct(Uuid $uuid, Client $client, Uuid $component, string $title, string $description, int $author, string $importance = Importance::NORMALLY, bool $confidential = FALSE) {
+
+        $this->issueId = $uuid;
+        $this->component = $component;
+        $this->client = $client;
+        $this->title = $title;
+        $this->description = $description;
+        $this->author = $author;
+        $this->importance = $importance;
+        $this->confidential = $confidential;
+
+    }
 
     /**
      * @return Uuid

@@ -17,8 +17,4 @@ class IssueRepository extends ServiceEntityRepository {
         $this->_em->flush();
     }
 
-
-    
-
-
 }

@@ -32,4 +32,4 @@ doctrine:
                 type: annotation
                 dir: '%kernel.project_dir%/src/Helpdesk/Domain/Entity'
                 prefix: 'App\Helpdesk\Domain\Entity'
-                alias: Client
+                alias: Helpdesk

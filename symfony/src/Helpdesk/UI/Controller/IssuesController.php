@@ -11,6 +11,7 @@ use App\Common\CQRS\QueryBus;
 use App\Common\CQRS\CommandBus;
 use App\Helpdesk\Domain\ValueObject\Importance;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Uid\Uuid;
 
 class IssuesController extends AbstractController {
 
@@ -42,6 +43,9 @@ class IssuesController extends AbstractController {
         if (!isset($data['client']) || !is_string($data['client']) || empty($data['client'])) {
             return $this->json(['error' => 'Issue "client" must be provided as text'], Response::HTTP_BAD_REQUEST);
         }
+        if (!isset($data['component']) || !is_string($data['component']) || empty($data['component'])) {
+            return $this->json(['error' => 'Issue "component" must be provided as text'], Response::HTTP_BAD_REQUEST);
+        }
 
         $importance = $data['importance'] ?? Importance::NORMALLY;
 
@@ -54,10 +58,8 @@ class IssuesController extends AbstractController {
         }
 
         $userID = $this->getUser()->getId();
-        $command = new CreateIssue($data['title'], $data['description'], $importance, $confidential, $userID, $data['client']);
+        $command = new CreateIssue($data['title'], $data['description'], $importance, (bool)$confidential, $userID, Uuid::fromString($data['client']), Uuid::fromString($data['component']));
         $this->commandBus->dispatch($command);
-
-        
 
         return $this->json(['data' => $data]);
     }

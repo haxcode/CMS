@@ -3,28 +3,30 @@
 namespace App\Helpdesk\Application\Command;
 
 use App\Common\CQRS\Command;
-
+use Symfony\Component\Uid\Uuid;
 
 final class CreateIssue implements Command {
 
-    private string  $title;
-    private string  $description;
-    private int     $author;
-    private ?string $client;
-    private string  $importance;
-    private bool    $confidential;
+    private string $title;
+    private string $description;
+    private int    $author;
+    private ?Uuid  $client;
+    private string $importance;
+    private bool   $confidential;
+    private ?Uuid  $component;
 
     /**
      * CreateIssue constructor.
      *
-     * @param string      $title
-     * @param string      $description
-     * @param string      $importance
-     * @param bool        $confidential
-     * @param int         $author
-     * @param string|null $client
+     * @param string    $title
+     * @param string    $description
+     * @param string    $importance
+     * @param bool      $confidential
+     * @param int       $author
+     * @param Uuid|null $client
+     * @param Uuid|null $component
      */
-    public function __construct(string $title, string $description, string $importance, bool $confidential, int $author, ?string $client) {
+    public function __construct(string $title, string $description, string $importance, bool $confidential, int $author, ?Uuid $client, ?Uuid $component) {
 
         $this->title = $title;
         $this->description = $description;
@@ -32,6 +34,7 @@ final class CreateIssue implements Command {
         $this->author = $author;
         $this->importance = $importance;
         $this->confidential = $confidential;
+        $this->component = $component;
     }
 
     /**
@@ -56,9 +59,9 @@ final class CreateIssue implements Command {
     }
 
     /**
-     * @return string|null
+     * @return Uuid|null
      */
-    public function getClient(): ?string {
+    public function getClient(): ?Uuid {
         return $this->client;
     }
 
@@ -74,6 +77,13 @@ final class CreateIssue implements Command {
      */
     public function getConfidential(): bool {
         return $this->confidential;
+    }
+
+    /**
+     * @return Uuid|null
+     */
+    public function getComponent(): ?Uuid {
+        return $this->component;
     }
 
 }

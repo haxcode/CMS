@@ -8,6 +8,7 @@ use App\Client\Domain\ValueObject\NIP;
 use Symfony\Component\Uid\Uuid;
 
 /**
+ * @ORM\Embeddable
  * @ORM\Entity(repositoryClass=ClientRepository::class)
  */
 class Client {
