@@ -7,8 +7,6 @@ use Symfony\Component\Uid\Uuid;
 use Doctrine\ORM\Mapping\OneToOne;
 use Doctrine\ORM\Mapping\JoinColumn;
 use App\Client\Domain\Entity\Client;
-use App\User\Entity\User;
-use App\Dictionary\Entity\Component;
 
 /**
  * @ORM\Entity(repositoryClass="App\Helpdesk\Infrastructure\Repository\IssueRepository")
@@ -38,10 +36,9 @@ class Issue {
     private string $description;
 
     /**
-     * @OneToOne(targetEntity="App\User\Entity\User")
-     * @JoinColumn(name="usr_id", referencedColumnName="id")
+     * @ORM\Column(type="bigint",name="usr_id")
      */
-    private User $author;
+    private int $author;
 
     /**
      * @ORM\Column(type="string")
@@ -54,10 +51,9 @@ class Issue {
     private string $confidential;
 
     /**
-     * @OneToOne(targetEntity="App\Dictionary\Entity\Component")
-     * @JoinColumn(name="component_uuid", referencedColumnName="id")
+     * @ORM\Column(type="uuid", name="component_uuid")
      */
-    private string $component;
+    private Uuid $component;
 
     /**
      * @return Uuid
@@ -155,6 +151,20 @@ class Issue {
      */
     public function setImportance(string $importance): void {
         $this->importance = $importance;
+    }
+
+    /**
+     * @return Uuid
+     */
+    public function getComponent(): Uuid {
+        return $this->component;
+    }
+
+    /**
+     * @param Uuid $component
+     */
+    public function setComponent(Uuid $component): void {
+        $this->component = $component;
     }
 
 }
