@@ -33,3 +33,10 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Helpdesk/Domain/Entity'
                 prefix: 'App\Helpdesk\Domain\Entity'
                 alias: Helpdesk
+            Planing:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/Planing/Domain/Entity'
+                prefix: 'App\Planing\Domain\Entity'
+                alias: Planing
+                                                                   

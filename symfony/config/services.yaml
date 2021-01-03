@@ -13,6 +13,9 @@ services:
     App\Common\CQRS\QueryHandler:
       tags:
         - { name: messenger.message_handler, bus: query.bus }
+    App\Common\Event\EventHandler:
+      tags:
+        - { name: messenger.message_handler, bus: event.bus }
   # default configuration for services in *this* file
   _defaults:
     autowire: true      # Automatically injects dependencies in your services.
@@ -43,6 +46,10 @@ services:
 
   App\Helpdesk\UI\Controller\:
     resource: '../src/Helpdesk/UI/Controller/'
+    tags: [ 'controller.service_arguments' ]
+
+  App\Planing\UI\Controller\:
+    resource: '../src/Planing/UI/Controller/'
     tags: [ 'controller.service_arguments' ]
 
   # add more service definitions when explicit configuration is needed

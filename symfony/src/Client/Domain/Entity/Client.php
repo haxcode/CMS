@@ -98,7 +98,7 @@ class Client {
     /**
      * @return bool
      */
-    public function isSla(): bool {
+    public function hasSla(): bool {
         return $this->sla;
     }
 

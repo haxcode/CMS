@@ -8,6 +8,9 @@ use App\Helpdesk\Infrastructure\Repository\IssueRepository;
 use App\Helpdesk\Domain\Entity\Issue;
 use Symfony\Component\Uid\Uuid;
 use App\Client\Infrastructure\Repository\ClientRepository;
+use App\Common\Event\EventBus;
+use App\Helpdesk\Domain\Event\CreatedIssueFromClientWithSLAReported;
+use DateTime;
 
 /**
  * Class CreateIssueHandler
@@ -27,10 +30,15 @@ final class CreateIssueHandler implements MessageHandlerInterface {
      * @var ClientRepository
      */
     private ClientRepository $clientRepository;
+    /**
+     * @var EventBus
+     */
+    private EventBus $eventBus;
 
-    public function __construct(IssueRepository $repository, ClientRepository $clientRepository) {
+    public function __construct(IssueRepository $repository, ClientRepository $clientRepository, EventBus $eventBus) {
         $this->repository = $repository;
         $this->clientRepository = $clientRepository;
+        $this->eventBus = $eventBus;
     }
 
     /**
@@ -39,9 +47,14 @@ final class CreateIssueHandler implements MessageHandlerInterface {
     public function __invoke(CreateIssue $cm): void {
 
         $client = $this->clientRepository->find($cm->getClient());
-        $issue = new Issue(Uuid::v4(), $client, $cm->getComponent(), $cm->getTitle(), $cm->getDescription(), $cm->getAuthor(), $cm->getImportance(), $cm->getConfidential());
-        file_put_contents('debug.html','<pre>'.print_r($issue,TRUE).'</pre>');
+        $issueID = Uuid::v4();
+        $issue = new Issue($issueID, $client, $cm->getComponent(), $cm->getTitle(), $cm->getDescription(), $cm->getAuthor(), (string)$cm->getImportance(), $cm->getConfidential());
         $this->repository->create($issue);
+        if ($client->hasSla()) {
+            $event = new CreatedIssueFromClientWithSLAReported($issueID, $client, $cm->getImportance(), new DateTime());
+            $this->eventBus->raise($event);
+        }
+
     }
 
 }

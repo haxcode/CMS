@@ -4,6 +4,8 @@ namespace App\Helpdesk\Application\Command;
 
 use App\Common\CQRS\Command;
 use Symfony\Component\Uid\Uuid;
+use App\Helpdesk\Domain\ValueObject\Importance;
+use App\Common\Exception\NotSupportedType;
 
 final class CreateIssue implements Command {
 
@@ -11,7 +13,7 @@ final class CreateIssue implements Command {
     private string $description;
     private int    $author;
     private ?Uuid  $client;
-    private string $importance;
+    private Importance $importance;
     private bool   $confidential;
     private ?Uuid  $component;
 
@@ -25,6 +27,8 @@ final class CreateIssue implements Command {
      * @param int       $author
      * @param Uuid|null $client
      * @param Uuid|null $component
+     *
+     * @throws NotSupportedType
      */
     public function __construct(string $title, string $description, string $importance, bool $confidential, int $author, ?Uuid $client, ?Uuid $component) {
 
@@ -32,8 +36,8 @@ final class CreateIssue implements Command {
         $this->description = $description;
         $this->client = $client;
         $this->author = $author;
-        $this->importance = $importance;
-        $this->confidential = $confidential;
+        $this->importance = new Importance($importance);
+        $this->confidential = $confidential;                                    
         $this->component = $component;
     }
 
@@ -66,9 +70,9 @@ final class CreateIssue implements Command {
     }
 
     /**
-     * @return string
+     * @return Importance
      */
-    public function getImportance(): string {
+    public function getImportance(): Importance {
         return $this->importance;
     }
 
