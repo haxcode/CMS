@@ -51,7 +51,7 @@ final class CreateIssueHandler implements MessageHandlerInterface {
         $issue = new Issue($issueID, $client, $cm->getComponent(), $cm->getTitle(), $cm->getDescription(), $cm->getAuthor(), (string)$cm->getImportance(), $cm->getConfidential());
         $this->repository->create($issue);
         if ($client->hasSla()) {
-            $event = new CreatedIssueFromClientWithSLAReported($issueID, $client, $cm->getImportance(), new DateTime());
+            $event = new CreatedIssueFromClientWithSLAReported($issueID, $cm->getDescription(), $client, $cm->getImportance(), new DateTime());
             $this->eventBus->raise($event);
         }
 

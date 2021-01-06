@@ -23,21 +23,31 @@ class CreatedIssueFromClientWithSLAReported implements Event {
      * @var Client
      */
     private Client $client;
+    private string $issueDescription;
 
     /**
      * IssueFromClientWithSLAReported constructor.
      *
      * @param Uuid       $issueID
+     * @param string     $issueDescription
      * @param Client     $client
      * @param Importance $importance
      * @param DateTime   $reportedAt
      */
-    public function __construct(Uuid $issueID, Client $client, Importance $importance, DateTime $reportedAt) {
+    public function __construct(Uuid $issueID, string $issueDescription, Client $client, Importance $importance, DateTime $reportedAt) {
 
         $this->issueID = $issueID;
         $this->importance = $importance;
         $this->reportedAt = $reportedAt;
         $this->client = $client;
+        $this->issueDescription = $issueDescription;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIssueDescription(): string {
+        return $this->issueDescription;
     }
 
     /**
