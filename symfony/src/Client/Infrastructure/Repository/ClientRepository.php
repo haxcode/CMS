@@ -6,6 +6,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Client\Domain\Entity\Client;
 use Doctrine\ORM\NonUniqueResultException;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @method Client|null find($id, $lockMode = NULL, $lockVersion = NULL)
@@ -15,6 +16,11 @@ use Doctrine\ORM\NonUniqueResultException;
  */
 class ClientRepository extends ServiceEntityRepository {
 
+    /**
+     * ClientRepository constructor.
+     *
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry) {
         parent::__construct($registry, Client::class);
     }
@@ -47,6 +53,13 @@ class ClientRepository extends ServiceEntityRepository {
         ;
     }
     */
+
+    /**
+     * @param Client $client
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
     public function create(Client $client): void {
         $this->_em->persist($client);
         $this->_em->flush();
@@ -64,6 +77,21 @@ class ClientRepository extends ServiceEntityRepository {
             return NULL;
 
         return $entity;
+    }
+
+    /**
+     * @param Uuid $uuid
+     *
+     * @return Client
+     * @throws ClientNotFoundException
+     */
+    public function getByUuid(Uuid $uuid): Client {
+        $client = $this->find($uuid);
+        if ($client == null)
+            throw new ClientNotFoundException("Client with this ID not exist");
+
+        return $client;
+
     }
 
 }

@@ -46,7 +46,7 @@ final class CreateIssueHandler implements CommandHandler {
      */
     public function __invoke(CreateIssue $cm): void {
 
-        $client = $this->clientRepository->find($cm->getClient());
+        $client = $this->clientRepository->getByUuid($cm->getClient());
         $issueID = Uuid::v4();
         $issue = new Issue($issueID, $client, $cm->getComponent(), $cm->getTitle(), $cm->getDescription(), $cm->getAuthor(), (string)$cm->getImportance(), $cm->getConfidential());
         $this->repository->create($issue);

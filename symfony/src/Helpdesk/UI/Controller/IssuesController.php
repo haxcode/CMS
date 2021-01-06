@@ -58,10 +58,14 @@ class IssuesController extends AbstractController {
         }
 
         $userID = $this->getUser()->getId();
-        $command = new CreateIssue($data['title'], $data['description'], $importance, (bool)$confidential, $userID, Uuid::fromString($data['client']), Uuid::fromString($data['component']));
-        $this->commandBus->dispatch($command);
+        try {
+            $command = new CreateIssue($data['title'], $data['description'], $importance, (bool)$confidential, $userID, Uuid::fromString($data['client']), Uuid::fromString($data['component']));
+            $this->commandBus->dispatch($command);
+        } catch (\Exception $exception) {
+            return $this->json(['error' => $exception->getMessage()], $exception->getCode());
+        }
 
-        return $this->json(['data' => $data]);
+        return $this->json(['data' => $data], Response::HTTP_CREATED);
     }
 
 }

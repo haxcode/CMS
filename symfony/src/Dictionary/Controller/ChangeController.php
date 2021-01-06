@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Dictionary\Repository\ChangeRepository;
 use App\Dictionary\Entity\Change;
 use Symfony\Component\Uid\Uuid;
+use Exception;
 
 class ChangeController extends AbstractController {
 
@@ -57,10 +58,13 @@ class ChangeController extends AbstractController {
         if (!Uuid::isValid($uuid)) {
             $this->json(['error' => 'ID of change is not valid identifier'], Response::HTTP_BAD_REQUEST);
         }
-        $uuid = new Uuid($uuid);
-        $entity = $this->repository->get($uuid);
-
-        return $this->json($entity);
+        try {
+            $uuid = new Uuid($uuid);
+            $entity = $this->repository->get($uuid);
+        } catch (\Exception $exception) {
+            return $this->json(['error' => $exception->getMessage()], $exception->getCode());
+        }
+        return $this->json($entity, Response::HTTP_OK);
     }
 
     /**
@@ -70,9 +74,11 @@ class ChangeController extends AbstractController {
      * @return JsonResponse
      */
     public function getChangesList(Request $request): JsonResponse {
-
-        $entities = $this->repository->findAll();
-
+        try {
+            $entities = $this->repository->findAll();
+        } catch (\Exception $exception) {
+            return $this->json(['error' => $exception->getMessage()], $exception->getCode());
+        }
         return $this->json($entities);
     }
 
@@ -84,23 +90,30 @@ class ChangeController extends AbstractController {
      * @return JsonResponse
      */
     public function updateChange(Request $request, string $uuid): JsonResponse {
-        if (!Uuid::isValid($uuid)) {
-            $this->json(['error' => 'ID of change is not valid identifier'], Response::HTTP_BAD_REQUEST);
-        }
-        $data = json_decode($request->getContent(), TRUE);
+        try {
+            if (empty($uuid) || !Uuid::isValid($uuid)) {
+                $this->json(['error' => 'ID of change is not valid identifier'], Response::HTTP_BAD_REQUEST);
+            }
+            $data = json_decode($request->getContent(), TRUE);
 
-        $uuid = new Uuid($uuid);
-        /** @var Change $change */
-        $change = $this->repository->get($uuid);
-        if (isset($data['description']) && is_string($data['description'])) {
-            $change->setDescription($data['description']);
-        }
-        if (isset($data['excerpt']) && is_string($data['description'])) {
-            $change->setExcerpt('description');
+            $uuid = new Uuid($uuid);
+            /** @var Change $change */
+
+            $change = $this->repository->get($uuid);
+            if (isset($data['description']) && is_string($data['description'])) {
+                $change->setDescription($data['description']);
+            }
+            if (isset($data['excerpt']) && is_string($data['description'])) {
+                $change->setExcerpt('description');
+            }
+
+            $this->repository->update($change);
+        } catch (Exception $exception) {
+            return $this->json(['error' => $exception->getMessage()], $exception->getCode());
         }
 
-        $this->repository->update($change);
         return $this->json(['uuid' => (string)$uuid]);
+
     }
 
     /**
@@ -114,15 +127,15 @@ class ChangeController extends AbstractController {
         if (!Uuid::isValid($uuid)) {
             $this->json(['error' => 'ID of change is not valid identifier'], Response::HTTP_BAD_REQUEST);
         }
-
-        $uuid = new Uuid($uuid);
-
         try {
+            $uuid = new Uuid($uuid);
+
             $this->repository->delete($uuid);
+
         } catch (\Exception $exception) {
             return $this->json(['error' => $exception->getMessage()], $exception->getCode());
         }
-        return new JsonResponse(NULL, 200);
+        return $this->json(['result' => 'success'], Response::HTTP_OK);
     }
 
 }

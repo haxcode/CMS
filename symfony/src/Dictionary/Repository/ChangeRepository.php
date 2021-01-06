@@ -10,6 +10,7 @@ use App\Dictionary\Entity\Change;
 use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use App\Dictionary\Exception\ChangeNotFoundException;
 
 class ChangeRepository extends ServiceEntityRepository {
 
@@ -48,12 +49,13 @@ class ChangeRepository extends ServiceEntityRepository {
      * @param Uuid $id
      *
      * @return Change|null
+     * @throws ChangeNotFoundException
      * @throws NonUniqueResultException
      */
     public function get(Uuid $id): ?Change {
         $data = $this->createQueryBuilder('c')->andWhere('c.id = :id')->setParameter('id', pg_escape_string($id))->getQuery()->getOneOrNullResult();
         if ($data == NULL)
-            return NULL;
+            throw new ChangeNotFoundException('Change with this ID not exist');
 
         return $data;
     }
@@ -65,7 +67,7 @@ class ChangeRepository extends ServiceEntityRepository {
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function delete(Uuid $uuid):void {
+    public function delete(Uuid $uuid): void {
         $change = $this->get($uuid);
         if ($change == NULL) {
             throw new NotFoundHttpException('Change with this uuid was not found', NULL, 404);
