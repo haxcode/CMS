@@ -2,7 +2,6 @@
 
 namespace App\Helpdesk\Infrastructure\CommandHandler;
 
-use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use App\Helpdesk\Application\Command\CreateIssue;
 use App\Helpdesk\Infrastructure\Repository\IssueRepository;
 use App\Helpdesk\Domain\Entity\Issue;
@@ -11,6 +10,7 @@ use App\Client\Infrastructure\Repository\ClientRepository;
 use App\Common\Event\EventBus;
 use App\Helpdesk\Domain\Event\CreatedIssueFromClientWithSLAReported;
 use DateTime;
+use App\Common\CQRS\CommandHandler;
 
 /**
  * Class CreateIssueHandler
@@ -20,7 +20,7 @@ use DateTime;
  * @author           Robert Kubica <rkubica@edokumenty.eu>
  * @copyright (c)    eDokumenty Sp. z o.o.
  */
-final class CreateIssueHandler implements MessageHandlerInterface {
+final class CreateIssueHandler implements CommandHandler {
 
     /**
      * @var IssueRepository
