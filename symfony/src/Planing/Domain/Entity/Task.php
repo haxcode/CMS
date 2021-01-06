@@ -5,6 +5,7 @@ namespace App\Planing\Domain\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 use App\Planing\Infrastructure\Repository\TaskRepository;
+use App\Planing\Domain\ValueObject\Status;
 
 /**
  * @ORM\Entity(repositoryClass=TaskRepository::class)
@@ -21,7 +22,7 @@ class Task {
     private ?string $estimatedTime;
     private ?string $spendTime;
 
-    public function __construct(Uuid $id, string $description, string $state, ?int $assigned, ?string $clientID) {
+    public function __construct(Uuid $id, string $description, Status $state, ?int $assigned, ?string $clientID) {
 
         $this->id = $id;
         $this->description = $description;
