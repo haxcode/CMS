@@ -15,7 +15,7 @@ use App\Planing\Application\Command\CreateTask;
  * @author           Robert Kubica <rkubica@edokumenty.eu>
  * @copyright (c)    eDokumenty Sp. z o.o.
  */
-final class CreateTaskHandler implements CommandHandler {
+class CreateTaskHandler implements CommandHandler {
 
     public function __construct(TaskRepository $repository, EventBus $eventBus) {
         $this->repository = $repository;
@@ -23,14 +23,14 @@ final class CreateTaskHandler implements CommandHandler {
     }
 
     /**
-     * @param CreateIssue $cm
+     * @param CreateTask $cm
      */
     public function __invoke(CreateTask $cm): void {
 
-        $client = $this->clientRepository->find($cm->getClient());
-        $issueID = Uuid::v4();
-        $issue = new Issue($issueID, $client, $cm->getComponent(), $cm->getTitle(), $cm->getDescription(), $cm->getAuthor(), (string)$cm->getImportance(), $cm->getConfidential());
-        $this->repository->create($issue);
+//        $client = $this->clientRepository->find($cm->getClient());
+//        $issueID = Uuid::v4();
+//        $issue = new Issue($issueID, $client, $cm->getComponent(), $cm->getTitle(), $cm->getDescription(), $cm->getAuthor(), (string)$cm->getImportance(), $cm->getConfidential());
+//        $this->repository->create($issue);
 
     }
 

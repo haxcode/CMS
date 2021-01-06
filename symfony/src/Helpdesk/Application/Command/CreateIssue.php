@@ -7,7 +7,7 @@ use Symfony\Component\Uid\Uuid;
 use App\Helpdesk\Domain\ValueObject\Importance;
 use App\Common\Exception\NotSupportedType;
 
-final class CreateIssue implements Command {
+class CreateIssue implements Command {
 
     private string $title;
     private string $description;

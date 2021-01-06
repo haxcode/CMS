@@ -13,9 +13,5 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
  */
 interface CommandHandler extends MessageHandlerInterface {
 
-    /**
-     * @param Command $command
-     */
-    public function __invoke(Command $command): void;
 
 }                                                                                       

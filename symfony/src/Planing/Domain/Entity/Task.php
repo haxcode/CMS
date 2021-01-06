@@ -12,6 +12,10 @@ use App\Planing\Domain\ValueObject\Status;
  */
 class Task {
 
+    /**
+     * @ORM\Column(type="uuid", name="task_id")
+     * @ORM\Id
+     */
     private Uuid $id;
     private string $description;
     private ?int $assigned;
