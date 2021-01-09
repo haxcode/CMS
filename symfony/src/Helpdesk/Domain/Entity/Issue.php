@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 use App\Client\Domain\Entity\Client;
 use App\Helpdesk\Domain\ValueObject\Importance;
+use DateTime;
 
 /**
  * @ORM\Entity(repositoryClass="App\Helpdesk\Infrastructure\Repository\IssueRepository")
@@ -34,9 +35,38 @@ class Issue {
     private string $description;
 
     /**
-     * @ORM\Column(type="bigint",name="usr_id")
+     * @ORM\Column(type="datetime")
+     */
+    private DateTime $addDate;
+
+    /**
+     * @ORM\Column(type="datetime",nullable=true)
+     */
+    private DateTime $lastModifyDate;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private ?DateTime $solveDate;
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private bool $solved = false;
+
+    /**
+     * @ORM\Column(type="bigint")
      */
     private int $author;
+
+    /**
+     * @ORM\Column(type="bigint",nullable=true)
+     */
+    private ?int $lastModifier;
+
+    /**
+     * @var int
+     */
+    private int $modifier;
 
     /**
      * @ORM\Column(type="string")
@@ -53,14 +83,14 @@ class Issue {
      */
     private Uuid $component;
 
-    public function __construct(Uuid $uuid, Client $client, Uuid $component, string $title, string $description, int $author, string $importance = Importance::NORMALLY, bool $confidential = FALSE) {
+    public function __construct(Uuid $uuid, Client $client, Uuid $component, string $title, string $description, int $modifier, string $importance = Importance::NORMALLY, bool $confidential = FALSE) {
 
         $this->issueId = $uuid;
         $this->component = $component;
         $this->client = $client;
         $this->title = $title;
         $this->description = $description;
-        $this->author = $author;
+        $this->modifier = $modifier;
         $this->importance = $importance;
         $this->confidential = $confidential;
 
@@ -176,6 +206,24 @@ class Issue {
      */
     public function setComponent(Uuid $component): void {
         $this->component = $component;
+    }
+
+    public function stampModified(): void {
+        $this->lastModifyDate = new DateTime();
+        $this->lastModifier = $this->modifier;
+    }
+
+    public function stampCreate(): void {
+        $this->addDate = new DateTime();
+        $this->author = $this->modifier;
+    }
+
+    public function markAsSolved(): void {
+        if ($this->solved == true) {
+            return;
+        }
+        $this->solveDate = new DateTime();
+        $this->solved = true;
     }
 
 }

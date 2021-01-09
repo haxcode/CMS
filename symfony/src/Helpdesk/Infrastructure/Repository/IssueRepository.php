@@ -13,6 +13,7 @@ class IssueRepository extends ServiceEntityRepository {
     }
 
     public function create(Issue $issue): void {
+        $issue->stampCreate();
         $this->_em->persist($issue);
         $this->_em->flush();
     }
