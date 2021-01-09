@@ -5,6 +5,7 @@ namespace App\Planing\Infrastructure\Repository;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use App\Planing\Domain\Entity\Release;
+use App\Planing\Domain\ValueObject\VersionType;
 
 class ReleaseRepository extends ServiceEntityRepository {
 
@@ -20,6 +21,12 @@ class ReleaseRepository extends ServiceEntityRepository {
     public function update(Release $release): void {
         $this->_em->persist($release);
         $this->_em->flush();
+    }
+
+    public function findLastReleased(VersionType $versionType) {
+        $data = $this->createQueryBuilder('release')->select('r.version')->from('release', 'r')->where('released')->orderBy('release_date','DESC')
+            ->getFirstResult();
+        return $data;
     }
 
 }

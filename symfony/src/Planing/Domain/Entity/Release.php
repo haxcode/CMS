@@ -27,7 +27,7 @@ class Release {
      */
     private ?string $codename;
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private ?DateTime $planedRelease;
 

@@ -90,7 +90,7 @@ class Issue {
     private bool $withdrawn = false;
 
     /**
-     * @ORM\Column(type="uuid", name="release_uuid")
+     * @ORM\Column(type="uuid", name="release_uuid", nullable=true)
      */
     private ?Uuid $release;
 

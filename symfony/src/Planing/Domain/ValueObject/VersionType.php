@@ -14,7 +14,7 @@ class VersionType {
 
     public function __construct(string $guid) {
         if (!self::isValid($guid)) {
-            throw new NotSupportedType('Not supported type of importance');
+            throw new NotSupportedType('Not supported type of version');
         }
         $this->guid = $guid;
     }
