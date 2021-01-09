@@ -11,6 +11,8 @@ trait THelperController {
 
     /**
      * @param Exception $exception
+     *
+     * @return JsonResponse
      */
     public function handleException(Exception $exception): JsonResponse {
         //TODO add logger for errors
@@ -20,6 +22,11 @@ trait THelperController {
         ], Response::HTTP_BAD_REQUEST);
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return array|null
+     */
     public function decodeRequestData(Request $request): ?array {
         $data = json_decode($request->getContent(), TRUE);
         if (!is_array($data)) {
@@ -28,6 +35,9 @@ trait THelperController {
         return $data;
     }
 
+    /**
+     * @return JsonResponse
+     */
     public function riseNotValidBodyException(): JsonResponse {
         return new JsonResponse([
             'error' => 'Not valid request',

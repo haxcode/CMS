@@ -6,11 +6,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use App\Planing\Application\Service\TaskService;
 use Exception;
+use App\Common\UI\Controller\THelperController;
 
 class TaskController extends AbstractController {
+
+    use THelperController;
 
     /**
      * @var TaskService
@@ -34,23 +36,16 @@ class TaskController extends AbstractController {
      * @return JsonResponse
      */
     public function createTask(Request $request): JsonResponse {
-        $data = json_decode($request->getContent(), TRUE);
-        if (!is_array($data)) {
-            return $this->json([
-                'error' => 'Not valid request',
-                'code'  => 400,
-            ], Response::HTTP_BAD_REQUEST);
-
+        $data = $this->decodeRequestData($request);
+        if (!$data) {
+            return $this->riseNotValidBodyException();
         }
 
         $data['author'] = $this->getUser()->getId();
         try {
             $uuid = $this->service->createTask($data);
         } catch (Exception $exception) {
-            return $this->json([
-                'error' => $exception->getMessage(),
-                'code'  => $exception->getCode(),
-            ], Response::HTTP_BAD_REQUEST);
+            return $this->handleException($exception);
         }
 
         return $this->json(['task_id' => $uuid]);
