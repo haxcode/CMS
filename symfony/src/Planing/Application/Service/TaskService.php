@@ -1,0 +1,79 @@
+<?php
+
+namespace App\Planing\Application\Service;
+
+use Symfony\Component\Uid\Uuid;
+use App\Planing\Domain\ValueObject\Status;
+use App\Common\Service\TServiceParameterValidator;
+use App\Common\Exception\Services\ServiceTypeParameterException;
+use App\Common\CQRS\CommandBus;
+use App\Planing\Application\Command\CreateTask;
+use App\Planing\Domain\Entity\Task;
+
+class TaskService {
+
+    use TServiceParameterValidator;
+
+    /**
+     * @var CommandBus
+     */
+    private CommandBus $commandBus;
+
+    /**
+     * TaskService constructor.
+     *
+     * @param CommandBus $commandBus
+     */
+    public function __construct(CommandBus $commandBus) {
+        $this->serviceName = 'TaskService';
+        $this->commandBus = $commandBus;
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return Uuid
+     * @throws ServiceTypeParameterException
+     * @throws \App\Common\Exception\Services\NotSupportedServiceParameterException
+     * @throws \App\Common\Exception\Services\ServiceParameterRequiredException
+     * @throws \App\Common\Exception\NotSupportedType
+     */
+    public function createTask(array $data): Uuid {
+
+        $this->validate($data, [
+            'description'    => 'required|text',
+            'client'         => 'required|uuid',
+            'status'         => 'text',
+            'assigned'       => 'int',
+            'related_to'     => 'uuid',
+            'estimated_time' => 'string',
+            'note'           => 'string',
+            'author'         => 'int',
+        ]);
+
+        $status = $data['status'] ?? Status::BACKLOG;
+        $id = Uuid::v4();
+        $assigned = $data['assigned'] ?? NULL;
+
+        $task = new Task($id, $data['description'], new Status($status), $data['author'], $assigned, $data['client']);
+
+        if (isset($data['related_to'])) {
+            $task->setRelatedTo($data['related_to']);
+        }
+
+        if (isset($data['estimated_time'])) {
+            $task->setEstimatedTime($data['estimated_time']);
+        }
+
+        if (isset($data['note'])) {
+            $task->setNote($data['note']);
+        }
+
+        $command = new CreateTask($task);
+
+        $this->commandBus->dispatch($command);
+
+        return $id;
+    }
+
+}

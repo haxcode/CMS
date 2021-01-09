@@ -65,7 +65,7 @@ class IssuesController extends AbstractController {
             $command = new CreateIssue($id, $data['title'], $data['description'], $importance, (bool)$confidential, $userID, Uuid::fromString($data['client']), Uuid::fromString($data['component']));
             $this->commandBus->dispatch($command);
         } catch (\Exception $exception) {
-            return $this->json(['error' => $exception->getMessage()], $exception->getCode());
+            return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
         }
 
         return $this->json(['issue_id' => $id], Response::HTTP_CREATED);

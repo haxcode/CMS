@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 use App\Planing\Infrastructure\Repository\TaskRepository;
 use App\Planing\Domain\ValueObject\Status;
+use DateTime;
 
 /**
  * @ORM\Entity(repositoryClass=TaskRepository::class)
@@ -50,13 +51,58 @@ class Task {
      */
     private ?string $spendTime;
 
-    public function __construct(Uuid $id, string $description, Status $state, ?int $assigned, ?string $clientID) {
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private DateTime $addDate;
+
+    /**
+     * @ORM\Column(type="datetime",nullable=true)
+     */
+    private DateTime $lastModifyDate;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private ?DateTime $doneDate;
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private bool $done = false;
+
+    /**
+     * @ORM\Column(type="bigint")
+     */
+    private int $author;
+
+    /**
+     * @ORM\Column(type="bigint",nullable=true)
+     */
+    private ?int $lastModifier;
+
+    /**
+     * @var int
+     */
+    private int $modifier;
+
+    /**
+     * Task constructor.
+     *
+     * @param Uuid        $id
+     * @param string      $description
+     * @param Status      $state
+     * @param int         $modifier
+     * @param int|null    $assigned
+     * @param string|null $clientID
+     */
+    public function __construct(Uuid $id, string $description, Status $state, int $modifier, ?int $assigned, ?string $clientID) {
 
         $this->id = $id;
         $this->description = $description;
         $this->state = $state;
         $this->assigned = $assigned;
         $this->clientID = $clientID;
+        $this->modifier = $modifier;
     }
 
     /**
@@ -148,6 +194,25 @@ class Task {
      */
     public function setSpendTime(?string $spendTime): void {
         $this->spendTime = $spendTime;
+    }
+
+    public function stampModified(): void {
+        $this->lastModifyDate = new DateTime();
+        $this->lastModifier = $this->modifier;
+    }
+
+    public function stampCreate(): void {
+        $this->addDate = new DateTime();
+        $this->author = $this->modifier;
+    }
+
+    public function markAsDone(): void {
+        if ($this->done == true) {
+            return;
+        }
+        $this->done = true;
+        $this->state = Status::DONE;
+        $this->doneDate = new DateTime();
     }
 
 }

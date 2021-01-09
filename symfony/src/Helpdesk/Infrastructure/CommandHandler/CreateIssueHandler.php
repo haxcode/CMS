@@ -50,7 +50,7 @@ final class CreateIssueHandler implements CommandHandler {
         $issue = new Issue($cm->getId(), $client, $cm->getComponent(), $cm->getTitle(), $cm->getDescription(), $cm->getAuthor(), (string)$cm->getImportance(), $cm->getConfidential());
         $this->repository->create($issue);
         if ($client->hasSla()) {
-            $event = new CreatedIssueFromClientWithSLAReported($cm->getId(), $cm->getTitle(), $client, $cm->getImportance(), new DateTime());
+            $event = new CreatedIssueFromClientWithSLAReported($cm->getId(), $cm->getTitle(), $client, $cm->getImportance(), new DateTime(), $cm->getAuthor());
             $this->eventBus->raise($event);
         }
 

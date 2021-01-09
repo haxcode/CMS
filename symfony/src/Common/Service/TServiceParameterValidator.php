@@ -27,9 +27,9 @@ trait TServiceParameterValidator {
      */
     public function validate(array $data, array $parameters, array $aliases = [], bool $strict = TRUE): void {
         foreach ($parameters as $parameter => $validation) {
-                $alias = isset($aliases[$parameter]) ? $aliases[$parameter] : $parameter;
-                $value = isset($data[$parameter]) ? $data[$parameter] : NULL;
-                $this->validateRules($value, $validation, $alias);
+            $alias = isset($aliases[$parameter]) ? $aliases[$parameter] : $parameter;
+            $value = isset($data[$parameter]) ? $data[$parameter] : NULL;
+            $this->validateRules($value, $validation, $alias);
         }
         if ($strict) {
             $diff = array_diff_key($data, $parameters);

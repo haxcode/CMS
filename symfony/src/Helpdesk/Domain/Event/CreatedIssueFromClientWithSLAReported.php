@@ -24,23 +24,26 @@ class CreatedIssueFromClientWithSLAReported implements Event {
      */
     private Client $client;
     private string $issueTitle;
+    private int    $issuer;
 
     /**
      * IssueFromClientWithSLAReported constructor.
      *
      * @param Uuid       $issueID
-     * @param string     $issueDescription
+     * @param string     $issueTitle
      * @param Client     $client
      * @param Importance $importance
      * @param DateTime   $reportedAt
+     * @param int        $issuer
      */
-    public function __construct(Uuid $issueID, string $issueTitle, Client $client, Importance $importance, DateTime $reportedAt) {
+    public function __construct(Uuid $issueID, string $issueTitle, Client $client, Importance $importance, DateTime $reportedAt, int $issuer) {
 
         $this->issueID = $issueID;
         $this->importance = $importance;
         $this->reportedAt = $reportedAt;
         $this->client = $client;
         $this->issueTitle = $issueTitle;
+        $this->issuer = $issuer;
     }
 
     /**
@@ -76,6 +79,13 @@ class CreatedIssueFromClientWithSLAReported implements Event {
      */
     public function getClient(): Client {
         return $this->client;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIssuer(): int {
+        return $this->issuer;
     }
 
 }
