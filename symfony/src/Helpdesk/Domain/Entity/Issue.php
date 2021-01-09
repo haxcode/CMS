@@ -92,7 +92,7 @@ class Issue {
     /**
      * @ORM\Column(type="uuid", name="release_uuid")
      */
-    private bool $release;
+    private Uuid $release;
 
     public function __construct(Uuid $uuid, Client $client, Uuid $component, string $title, string $description, int $modifier, string $importance = Importance::NORMALLY, bool $confidential = FALSE) {
 
@@ -272,16 +272,16 @@ class Issue {
     }
 
     /**
-     * @return bool
+     * @return Uuid
      */
-    public function isRelease(): bool {
+    public function getRelease(): Uuid {
         return $this->release;
     }
 
     /**
-     * @param bool $release
+     * @param Uuid $release
      */
-    public function setRelease(bool $release): void {
+    public function setRelease(Uuid $release): void {
         $this->release = $release;
     }
 
