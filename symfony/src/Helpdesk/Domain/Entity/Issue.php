@@ -92,7 +92,7 @@ class Issue {
     /**
      * @ORM\Column(type="uuid", name="release_uuid")
      */
-    private Uuid $release;
+    private ?Uuid $release;
 
     public function __construct(Uuid $uuid, Client $client, Uuid $component, string $title, string $description, int $modifier, string $importance = Importance::NORMALLY, bool $confidential = FALSE) {
 
@@ -231,8 +231,13 @@ class Issue {
 
     public function markAsSolved(): void {
         if ($this->isWithdrawn()) {
-            throw new DomainHelpdeskLogicException('Can not mark issue as done, because is withdrawn.');
+            throw new DomainHelpdeskLogicException('Can not mark issue as solved, because is withdrawn.');
         }
+
+        if(!$this->getRelease()){
+            throw new DomainHelpdeskLogicException('Can not solve issue! Issue must be related to release before mark as solved.');
+        }
+
         if ($this->solved == true) {
             return;
         }
@@ -272,16 +277,16 @@ class Issue {
     }
 
     /**
-     * @return Uuid
+     * @return Uuid|null
      */
-    public function getRelease(): Uuid {
+    public function getRelease(): ?Uuid {
         return $this->release;
     }
 
     /**
-     * @param Uuid $release
+     * @param Uuid|null $release
      */
-    public function setRelease(Uuid $release): void {
+    public function setRelease(?Uuid $release): void {
         $this->release = $release;
     }
 
