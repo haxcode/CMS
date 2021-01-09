@@ -89,6 +89,11 @@ class Issue {
      */
     private bool $withdrawn = false;
 
+    /**
+     * @ORM\Column(type="uuid", name="release_uuid")
+     */
+    private bool $release;
+
     public function __construct(Uuid $uuid, Client $client, Uuid $component, string $title, string $description, int $modifier, string $importance = Importance::NORMALLY, bool $confidential = FALSE) {
 
         $this->issueId = $uuid;
@@ -264,6 +269,20 @@ class Issue {
      */
     public function isWithdrawn(): bool {
         return $this->withdrawn;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRelease(): bool {
+        return $this->release;
+    }
+
+    /**
+     * @param bool $release
+     */
+    public function setRelease(bool $release): void {
+        $this->release = $release;
     }
 
 }
