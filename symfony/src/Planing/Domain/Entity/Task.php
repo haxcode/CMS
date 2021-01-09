@@ -17,13 +17,37 @@ class Task {
      * @ORM\Id
      */
     private Uuid $id;
+    /**
+     * @ORM\Column(type="string")
+     */
     private string $description;
+    /**
+     * @ORM\Column(type="bigint", nullable=TRUE)
+     */
     private ?int $assigned;
+    /**
+     * @ORM\Column(type="string")
+     */
     private string $state;
+    /**
+     * @ORM\Column(type="string", nullable=TRUE)
+     */
     private ?string $clientID;
+    /**
+     * @ORM\Column(type="string", nullable=TRUE)
+     */
     private ?string $note;
+    /**
+     * @ORM\Column(type="string", nullable=TRUE)
+     */
     private ?string $relatedTo;
+    /**
+     * @ORM\Column(type="string", nullable=TRUE)
+     */
     private ?string $estimatedTime;
+    /**
+     * @ORM\Column(type="string", nullable=TRUE)
+     */
     private ?string $spendTime;
 
     public function __construct(Uuid $id, string $description, Status $state, ?int $assigned, ?string $clientID) {

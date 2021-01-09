@@ -52,7 +52,9 @@ class ChangeController extends AbstractController {
     /**
      * @Route(path="/api/dictionary/changes/{uuid}",methods={"GET"},name="dictionary_change_read")
      * @param Request $request
-     * @param string  $id
+     * @param string  $uuid
+     *
+     * @return JsonResponse
      */
     public function getChange(Request $request, string $uuid): JsonResponse {
         if (!Uuid::isValid($uuid)) {

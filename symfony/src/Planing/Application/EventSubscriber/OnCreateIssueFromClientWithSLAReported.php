@@ -42,7 +42,7 @@ class OnCreateIssueFromClientWithSLAReported implements EventHandler {
         // in reaction to add sla issue our team need to have assigned task in current sprint to investigate this issue
 
         $taskID = Uuid::v4();
-        $task = new Task($taskID, 'Investigate: '.$event->getIssueDescription(), new Status(Status::WEEKLY), NULL, $event->getClient()->getId());
+        $task = new Task($taskID, 'Investigate: '.$event->getIssueTitle(), new Status(Status::WEEKLY), NULL, $event->getClient()->getId());
         $this->commandBus->dispatch(new CreateTask($task));
     }
 

@@ -11,7 +11,7 @@ use App\Helpdesk\Domain\ValueObject\Importance;
 class DictionaryController extends AbstractController {
 
     /**
-     * @Route(path="/api/helpdesk/dic/importance", methods={"GET"})
+     * @Route(path="/api/helpdesk/dic/importance", methods={"GET"},name="helpdesk_importance_dictionary")
      * @param Request $request
      *
      * @return JsonResponse

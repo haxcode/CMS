@@ -1,6 +1,10 @@
 helpdesk_issue_controller:
   resource: ../../src/Helpdesk/UI/Controller/
   type: annotation
+  
+planing_controller:
+  resource: ../../src/Planing/UI/Controller/
+  type: annotation
 
 client_controller:
   resource: ../../src/Client/UI/Controller/
@@ -12,10 +16,4 @@ dictionary_controllers:
 
 user_controllers:
   resource: ../../src/User/Controller/
-  type: annotation
-
-
-
-kernel:
-  resource: ../../src/Kernel.php
   type: annotation

@@ -12,6 +12,8 @@ use App\Common\CQRS\CommandBus;
 use App\Helpdesk\Domain\ValueObject\Importance;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Uid\Uuid;
+use App\Helpdesk\Application\Query\GetIssueByUuid;
+use App\Common\Exception\NotFoundException;
 
 class IssuesController extends AbstractController {
 
@@ -59,13 +61,37 @@ class IssuesController extends AbstractController {
 
         $userID = $this->getUser()->getId();
         try {
-            $command = new CreateIssue($data['title'], $data['description'], $importance, (bool)$confidential, $userID, Uuid::fromString($data['client']), Uuid::fromString($data['component']));
+            $id = Uuid::v4();
+            $command = new CreateIssue($id, $data['title'], $data['description'], $importance, (bool)$confidential, $userID, Uuid::fromString($data['client']), Uuid::fromString($data['component']));
             $this->commandBus->dispatch($command);
         } catch (\Exception $exception) {
             return $this->json(['error' => $exception->getMessage()], $exception->getCode());
         }
 
-        return $this->json(['data' => $data], Response::HTTP_CREATED);
+        return $this->json(['issue_id' => $id], Response::HTTP_CREATED);
+    }
+
+    /**
+     * @Route(path="/api/helpdesk/issues/{uuid}",methods={"GET"},name="helpdesk_issue_get")
+     * @param string $uuid
+     *
+     * @return JsonResponse
+     */
+    public function getIssue(Request $request, string $uuid): JsonResponse {
+        if (!Uuid::isValid($uuid)) {
+            return $this->json(['error' => 'Issue ID must be a valid string uuid']);
+        }
+        try {
+
+            $query = new GetIssueByUuid(new Uuid($uuid));
+            $data = $this->queryBus->handle($query);
+            if (empty($data)) {
+                throw new NotFoundException("Issue with specified identity not found");
+            }
+            return $this->json(['data' => $data], Response::HTTP_OK);
+        } catch (\Exception $exception) {
+            return $this->json(['error' => $exception->getMessage()], $exception->getCode());
+        }
     }
 
 }

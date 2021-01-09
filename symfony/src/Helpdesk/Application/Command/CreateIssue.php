@@ -16,6 +16,10 @@ class CreateIssue implements Command {
     private Importance $importance;
     private bool   $confidential;
     private ?Uuid  $component;
+    /**
+     * @var Uuid
+     */
+    private Uuid $id;
 
     /**
      * CreateIssue constructor.
@@ -30,7 +34,8 @@ class CreateIssue implements Command {
      *
      * @throws NotSupportedType
      */
-    public function __construct(string $title, string $description, string $importance, bool $confidential, int $author, ?Uuid $client, ?Uuid $component) {
+    public function __construct(Uuid $id,string $title, string $description, string $importance, bool $confidential, int $author, ?Uuid $client, ?Uuid
+    $component) {
 
         $this->title = $title;
         $this->description = $description;
@@ -39,7 +44,9 @@ class CreateIssue implements Command {
         $this->importance = new Importance($importance);
         $this->confidential = $confidential;                                    
         $this->component = $component;
+        $this->id = $id;
     }
+
 
     /**
      * @return string
@@ -88,6 +95,13 @@ class CreateIssue implements Command {
      */
     public function getComponent(): ?Uuid {
         return $this->component;
+    }
+
+    /**
+     * @return Uuid
+     */
+    public function getId(): Uuid {
+        return $this->id;
     }
 
 }

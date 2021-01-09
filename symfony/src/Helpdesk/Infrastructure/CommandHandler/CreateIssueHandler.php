@@ -5,7 +5,6 @@ namespace App\Helpdesk\Infrastructure\CommandHandler;
 use App\Helpdesk\Application\Command\CreateIssue;
 use App\Helpdesk\Infrastructure\Repository\IssueRepository;
 use App\Helpdesk\Domain\Entity\Issue;
-use Symfony\Component\Uid\Uuid;
 use App\Client\Infrastructure\Repository\ClientRepository;
 use App\Common\Event\EventBus;
 use App\Helpdesk\Domain\Event\CreatedIssueFromClientWithSLAReported;
@@ -47,11 +46,11 @@ final class CreateIssueHandler implements CommandHandler {
     public function __invoke(CreateIssue $cm): void {
 
         $client = $this->clientRepository->getByUuid($cm->getClient());
-        $issueID = Uuid::v4();
-        $issue = new Issue($issueID, $client, $cm->getComponent(), $cm->getTitle(), $cm->getDescription(), $cm->getAuthor(), (string)$cm->getImportance(), $cm->getConfidential());
+
+        $issue = new Issue($cm->getId(), $client, $cm->getComponent(), $cm->getTitle(), $cm->getDescription(), $cm->getAuthor(), (string)$cm->getImportance(), $cm->getConfidential());
         $this->repository->create($issue);
         if ($client->hasSla()) {
-            $event = new CreatedIssueFromClientWithSLAReported($issueID, $cm->getDescription(), $client, $cm->getImportance(), new DateTime());
+            $event = new CreatedIssueFromClientWithSLAReported($cm->getId(), $cm->getTitle(), $client, $cm->getImportance(), new DateTime());
             $this->eventBus->raise($event);
         }
 
