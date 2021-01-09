@@ -10,11 +10,13 @@ use App\Common\CQRS\QueryBus;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Uid\Uuid;
 use App\Helpdesk\Application\Query\GetIssueByUuid;
-use App\Common\Exception\NotFoundException;
 use Exception;
 use App\Helpdesk\Application\Service\IssueService;
+use App\Common\UI\Controller\TExceptionController;
 
 class IssuesController extends AbstractController {
+
+    use TExceptionController;
 
     /**
      * @var IssueService
@@ -50,10 +52,7 @@ class IssuesController extends AbstractController {
         try {
             $uuid = $this->service->creatIssue($data);
         } catch (Exception $exception) {
-            return $this->json([
-                'error' => $exception->getMessage(),
-                'code'  => $exception->getCode(),
-            ], Response::HTTP_BAD_REQUEST);
+            return $this->handleException($exception);
         }
 
         return $this->json(['issue_id' => $uuid]);
@@ -70,13 +69,8 @@ class IssuesController extends AbstractController {
             return $this->json(['error' => 'Issue ID must be a valid string uuid']);
         }
         try {
-
-            $query = new GetIssueByUuid(new Uuid($uuid));
-            $data = $this->queryBus->handle($query);
-            if (empty($data)) {
-                throw new NotFoundException("Issue with specified identity not found");
-            }
-            return $this->json(['data' => $data], Response::HTTP_OK);
+            $query = new GetIssueByUuid(new Uuid($uuid), $this->getUser()->getId());
+            return $this->json(['data' => $this->queryBus->handle($query)], Response::HTTP_OK);
         } catch (Exception $exception) {
             return $this->json(['error' => $exception->getMessage()], $exception->getCode());
         }
