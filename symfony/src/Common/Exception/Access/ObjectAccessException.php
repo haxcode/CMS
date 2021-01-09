@@ -7,7 +7,7 @@ use Throwable;
 
 class ObjectAccessException extends Exception {
 
-    protected $object;
+    protected string $object;
 
     /**
      * ObjectAccessException constructor.
