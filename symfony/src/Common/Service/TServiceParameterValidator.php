@@ -61,6 +61,9 @@ trait TServiceParameterValidator {
         if (in_array('email', $rules) && (!filter_var($data, FILTER_VALIDATE_EMAIL))) {
             throw new ServiceTypeParameterException($this->serviceName, $alias, 'email');
         }
+        if (in_array('bool', $rules) && (!is_bool($data))) {
+            throw new ServiceTypeParameterException($this->serviceName, $alias, 'boolean');
+        }
         if (in_array('uuid', $rules) && (!Uuid::isValid($data))) {
             throw new ServiceTypeParameterException($this->serviceName, $alias, 'uuid');
         }

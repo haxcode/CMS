@@ -6,23 +6,29 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use App\Helpdesk\Application\Command\CreateIssue;
 use App\Common\CQRS\QueryBus;
-use App\Common\CQRS\CommandBus;
-use App\Helpdesk\Domain\ValueObject\Importance;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Uid\Uuid;
 use App\Helpdesk\Application\Query\GetIssueByUuid;
 use App\Common\Exception\NotFoundException;
+use Exception;
+use App\Helpdesk\Application\Service\IssueService;
 
 class IssuesController extends AbstractController {
 
-    private QueryBus   $queryBus;
-    private CommandBus $commandBus;
+    /**
+     * @var IssueService
+     */
+    private IssueService $service;
+    /**
+     * @var QueryBus
+     */
+    private QueryBus $queryBus;
 
-    public function __construct(QueryBus $queryBus, CommandBus $commandBus) {
+    public function __construct(IssueService $service, QueryBus $queryBus) {
+
+        $this->service = $service;
         $this->queryBus = $queryBus;
-        $this->commandBus = $commandBus;
     }
 
     /**
@@ -31,44 +37,26 @@ class IssuesController extends AbstractController {
      *
      * @return JsonResponse
      */
-    public function create(Request $request): JsonResponse {
+    public function createIssue(Request $request): JsonResponse {
         $data = json_decode($request->getContent(), TRUE);
+        if (!is_array($data)) {
+            return $this->json([
+                'error' => 'Not valid request',
+                'code'  => 400,
+            ], Response::HTTP_BAD_REQUEST);
 
-        if (!isset($data['title']) || !is_string($data['title']) || empty($data['title'])) {
-            return $this->json(['error' => 'Issue "title" must be provided as text'], Response::HTTP_BAD_REQUEST);
         }
-
-        if (!isset($data['description']) || !is_string($data['description']) || empty($data['description'])) {
-            return $this->json(['error' => 'Issue "description" must be provided as text'], Response::HTTP_BAD_REQUEST);
-        }
-
-        if (!isset($data['client']) || !is_string($data['client']) || empty($data['client'])) {
-            return $this->json(['error' => 'Issue "client" must be provided as text'], Response::HTTP_BAD_REQUEST);
-        }
-        if (!isset($data['component']) || !is_string($data['component']) || empty($data['component'])) {
-            return $this->json(['error' => 'Issue "component" must be provided as text'], Response::HTTP_BAD_REQUEST);
-        }
-
-        $importance = $data['importance'] ?? Importance::NORMALLY;
-
-        if (!Importance::isValid($importance)) {
-            return $this->json(['error' => 'Issue "importance" must be provided as one of the values from dictionary'], Response::HTTP_BAD_REQUEST);
-        }
-        $confidential = FALSE;
-        if (isset($data['confidential']) && is_bool($data['confidential'])) {
-            $confidential = $data['confidential'];
-        }
-
-        $userID = $this->getUser()->getId();
+        $data['author'] = $this->getUser()->getId();
         try {
-            $id = Uuid::v4();
-            $command = new CreateIssue($id, $data['title'], $data['description'], $importance, (bool)$confidential, $userID, Uuid::fromString($data['client']), Uuid::fromString($data['component']));
-            $this->commandBus->dispatch($command);
-        } catch (\Exception $exception) {
-            return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
+            $uuid = $this->service->creatIssue($data);
+        } catch (Exception $exception) {
+            return $this->json([
+                'error' => $exception->getMessage(),
+                'code'  => $exception->getCode(),
+            ], Response::HTTP_BAD_REQUEST);
         }
 
-        return $this->json(['issue_id' => $id], Response::HTTP_CREATED);
+        return $this->json(['issue_id' => $uuid]);
     }
 
     /**

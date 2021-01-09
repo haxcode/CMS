@@ -37,7 +37,7 @@ class DBALGetIssueByUuidHandler implements QueryHandler {
      * @throws \Doctrine\DBAL\Exception
      */
     public function __invoke(GetIssueByUuid $query) {
-        $data = $this->connection->createQueryBuilder()->select('issue_id, client_id, title, description, usr_id, importance, is_confidential, component_uuid')->from('issue')->where('issue_id = :uuid')->setParameter('uuid', (string)$query->getUuid())->execute();
+        $data = $this->connection->createQueryBuilder()->select('issue_id, client_id, title, description, add_date, last_modify_date, solve_date, solved, author, last_modifier, author, importance, is_confidential, component_uuid ')->from('issue')->where('issue_id = :uuid')->setParameter('uuid', (string)$query->getUuid())->execute();
         return $data;
     }
 
