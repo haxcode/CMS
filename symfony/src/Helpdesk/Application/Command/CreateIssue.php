@@ -24,6 +24,7 @@ class CreateIssue implements Command {
     /**
      * CreateIssue constructor.
      *
+     * @param Uuid      $id
      * @param string    $title
      * @param string    $description
      * @param string    $importance
