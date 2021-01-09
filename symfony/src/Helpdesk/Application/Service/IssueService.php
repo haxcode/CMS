@@ -11,6 +11,11 @@ use App\Helpdesk\Application\Command\CreateIssue;
 use App\Helpdesk\Application\Command\MarkIssueAsSolved;
 use Symfony\Component\Security\Core\User\UserInterface;
 use App\Helpdesk\Application\Command\WithdrawIssue;
+use App\Helpdesk\Application\Command\UpdateIssue;
+use App\Common\Exception\Services\ServiceTypeParameterException;
+use App\Common\Exception\Services\ServiceParameterRequiredException;
+use App\Common\Exception\Services\NotSupportedServiceParameterException;
+use App\Common\Exception\NotSupportedType;
 
 class IssueService {
 
@@ -19,6 +24,12 @@ class IssueService {
     private QueryBus   $queryBus;
     private CommandBus $commandBus;
 
+    /**
+     * IssueService constructor.
+     *
+     * @param QueryBus   $queryBus
+     * @param CommandBus $commandBus
+     */
     public function __construct(QueryBus $queryBus, CommandBus $commandBus) {
 
         $this->serviceName = 'Issue';
@@ -26,6 +37,15 @@ class IssueService {
         $this->commandBus = $commandBus;
     }
 
+    /**
+     * @param array $data
+     *
+     * @return Uuid
+     * @throws NotSupportedType
+     * @throws NotSupportedServiceParameterException
+     * @throws ServiceParameterRequiredException
+     * @throws ServiceTypeParameterException
+     */
     public function creatIssue(array $data): Uuid {
 
         $this->validate($data, [
@@ -65,6 +85,12 @@ class IssueService {
         return true;
     }
 
+    /**
+     * @param string        $uuid
+     * @param UserInterface $user
+     *
+     * @return bool
+     */
     public function withdrawIssue(string $uuid, UserInterface $user): bool {
 
         $uuid = new Uuid($uuid);
@@ -72,8 +98,31 @@ class IssueService {
 
         $this->commandBus->dispatch($command);
 
-
         return true;
+    }
+
+    /**
+     * @param array $data
+     *
+     * @throws NotSupportedServiceParameterException
+     * @throws ServiceParameterRequiredException
+     * @throws ServiceTypeParameterException
+     */
+    public function updateIssue(array $data, UserInterface $user): void {
+
+        $this->validate($data, [
+            'issue_id'        => 'required|uuid',
+            'title'           => 'text',
+            'description'     => 'text',
+            'client_id'       => 'uuid',
+            'component_uuid'  => 'uuid',
+            'importance'      => 'text',
+            'is_confidential' => 'bool',
+        ]);
+
+        $command = new UpdateIssue($data, $user);
+        $this->commandBus->dispatch($command);
+
     }
 
 }

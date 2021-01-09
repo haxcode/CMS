@@ -57,6 +57,28 @@ class IssuesController extends AbstractController {
     }
 
     /**
+     * @Route(path="/api/helpdesk/issues/{uuid}",methods={"PATCH"},name="helpdesk_issue_update")
+     * @param Request $request
+     * @param string  $uuid
+     *
+     * @return JsonResponse
+     */
+    public function updateIssue(Request $request, string $uuid): JsonResponse {
+        $data = $this->decodeRequestData($request);
+        if (!$data) {
+            return $this->riseNotValidBodyException();
+        }
+        $data['issue_id'] = $uuid;
+        try {
+            $this->service->updateIssue($data, $this->getUser());
+        } catch (Exception $exception) {
+            return $this->handleException($exception);
+        }
+
+        return $this->json([], Response::HTTP_OK);
+    }
+
+    /**
      * @Route(path="/api/helpdesk/issues/{uuid}",methods={"GET"},name="helpdesk_issue_get")
      * @param string $uuid
      *
@@ -123,8 +145,6 @@ class IssuesController extends AbstractController {
             return $this->handleException($exception);
         }
     }
-
-
 
     /**
      * @Route(path="/api/helpdesk/issues/{uuid}/tasks",methods={"GET"},name="helpdesk_issue_tasks")

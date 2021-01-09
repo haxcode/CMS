@@ -18,7 +18,7 @@ class IssueRepository extends ServiceEntityRepository {
         $this->_em->flush();
     }
 
-    public function update(Issue $issue):void {
+    public function update(Issue $issue): void {
         $issue->stampModified();
         $this->_em->persist($issue);
         $this->_em->flush();
