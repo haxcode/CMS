@@ -225,7 +225,7 @@ class Issue {
     }
 
     public function markAsSolved(): void {
-        if($this->isWithdrawn()){
+        if ($this->isWithdrawn()) {
             throw new DomainHelpdeskLogicException('Can not mark issue as done, because is withdrawn.');
         }
         if ($this->solved == true) {

@@ -19,8 +19,8 @@ class GetIssueByUuid implements Query {
     /**
      * @var Uuid
      */
-    private Uuid $uuid;
-    private UserInterface  $questioningUser;
+    private Uuid          $uuid;
+    private UserInterface $questioningUser;
 
     /**
      * GetIssueByUuid constructor.

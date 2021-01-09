@@ -7,7 +7,6 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use App\Common\Exception\NotFoundException;
 use App\Common\Exception\Access\ObjectAccessException;
-use App\Planing\Application\Query\GetTasksByIssueUuid;
 use App\Planing\Application\Query\GetTaskByUuid;
 use App\User\Security\AccessRoleHelper;
 use App\User\Entity\ValueObject\Role;

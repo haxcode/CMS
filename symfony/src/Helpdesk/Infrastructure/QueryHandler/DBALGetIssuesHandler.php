@@ -44,8 +44,7 @@ class DBALGetIssuesHandler implements QueryHandler {
         $queryBuilder = $this->connection->createQueryBuilder()->select('issue_id, client_id, title, description, add_date, last_modify_date, solve_date, solved, author, last_modifier, author, importance, is_confidential, component_uuid, withdrawn')->from('issue');
 
         if (!AccessRoleHelper::hasRole($query->getQuestioningUser(), Role::ADMIN)) {
-            $queryBuilder->where(' NOT withdrawn AND (NOT is_confidential OR author = :author)')->setParameter('author', (string)$query->getQuestioningUser()
-                ->getId());
+            $queryBuilder->where(' NOT withdrawn AND (NOT is_confidential OR author = :author)')->setParameter('author', (string)$query->getQuestioningUser()->getId());
         }
 
         return $queryBuilder->execute()->fetchAllAssociative();

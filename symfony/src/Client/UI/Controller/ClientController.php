@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Client\Application\Query\ClientsList;
 use App\Common\UI\Controller\THelperController;
 use App\Client\Application\Service\ClientService;
+use Exception;
 
 class ClientController extends AbstractController {
 
@@ -43,11 +44,10 @@ class ClientController extends AbstractController {
         }
 
         try {
-           $uuid = $this->service->createClient($data);
-        }catch (\Exception $exception){
-          return  $this->handleException($exception);
+            $uuid = $this->service->createClient($data);
+        } catch (Exception $exception) {
+            return $this->handleException($exception);
         }
-
 
         return $this->json(['client_id' => (string)$uuid], Response::HTTP_CREATED);
     }
@@ -63,7 +63,7 @@ class ClientController extends AbstractController {
         try {
             $query = new ClientsList();
             $data = $this->queryBus->handle($query);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             return $this->handleException($exception);
         }
 

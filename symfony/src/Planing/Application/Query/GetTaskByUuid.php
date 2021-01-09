@@ -42,5 +42,4 @@ class GetTaskByUuid implements Query {
         return $this->user;
     }
 
-
 }

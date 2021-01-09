@@ -90,7 +90,7 @@ final class UpdateIssueHandler implements CommandHandler {
             }
             $issue->setComponent($component->getId());
         }
-        
+
         if ($cm->isChanged('importance')) {
             $issue->setImportance(new Importance($cm->getData()['importance']));
         }

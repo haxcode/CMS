@@ -104,7 +104,7 @@ class UpdateTaskHandler implements CommandHandler {
         if ($c->isChanged('spend_time')) {
             $task->setSpendTime($c->getData()['spend_time']);
         }
-                                                                                    
+
         if ($c->isChanged('note')) {
             $task->setNote($c->getData()['note']);
         }

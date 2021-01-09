@@ -4,9 +4,7 @@ namespace App\Planing\Infrastructure\QueryHandler;
 
 use App\Common\CQRS\QueryHandler;
 use Doctrine\DBAL\Connection;
-use App\Helpdesk\Application\Query\GetIssueByUuid;
 use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\Driver\ResultStatement;
 use App\Common\Exception\NotFoundException;
 use App\User\Security\AccessRoleHelper;
 use App\User\Entity\ValueObject\Role;
@@ -55,13 +53,7 @@ class DBALGetTasksByIssueUuidHandler implements QueryHandler {
             throw new ObjectAccessException(Issue::class, "This issue is confidential you dont have permission to read issue tasks!");
         }
 
-        $data = $this->connection->createQueryBuilder()
-            ->select('task_id, description, assigned, state, client_id, note, related_to, estimated_time, spend_time, add_date, last_modify_date, done_date, done, author, last_modifier')
-            ->from('task')
-            ->where('related_to = :uuid')
-            ->setParameter('uuid', (string)$query->getUuid())
-            ->execute()
-            ->fetchAllAssociative();
+        $data = $this->connection->createQueryBuilder()->select('task_id, description, assigned, state, client_id, note, related_to, estimated_time, spend_time, add_date, last_modify_date, done_date, done, author, last_modifier')->from('task')->where('related_to = :uuid')->setParameter('uuid', (string)$query->getUuid())->execute()->fetchAllAssociative();
         return $data;
     }
 

@@ -42,8 +42,6 @@ class Status implements Stringable {
         return in_array($guid, array_keys(self::getTypes()));
     }
 
-
-
     /**
      * @return string
      */

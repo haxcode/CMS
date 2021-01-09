@@ -15,8 +15,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @copyright (c)    eDokumenty Sp. z o.o.
  */
 class GetIssues implements Query {
-    
-    private UserInterface  $questioningUser;
+
+    private UserInterface $questioningUser;
 
     /**
      * GetIssueByUuid constructor.

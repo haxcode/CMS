@@ -42,5 +42,4 @@ class GetTasksByIssueUuid implements Query {
         return $this->user;
     }
 
-
 }
