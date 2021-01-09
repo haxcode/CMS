@@ -2,6 +2,8 @@
 
 namespace App\Planing\Domain\ValueObject;
 
+use App\Common\Exception\NotSupportedType;
+
 class Version {
 
     private int $major;
@@ -19,6 +21,25 @@ class Version {
         $this->major = $major;
         $this->minor = $minor;
         $this->patch = $patch;
+    }
+
+    /**
+     * @param VersionType $versionType
+     *
+     * @return Version
+     * @throws NotSupportedType
+     */
+    public function getNextVersion(VersionType $versionType): Version {
+        switch ($versionType) {
+            case VersionType::MAJOR:
+                return new Version($this->major + 1, 0, 0);
+            case VersionType::MINOR:
+                return new Version($this->major, $this->minor + 1, 0);
+            case VersionType::PATCH:
+                return new Version($this->major, $this->minor, $this->patch + 1);
+            default:
+                throw new NotSupportedType('Not supported type of Version');
+        }
     }
 
     /**
