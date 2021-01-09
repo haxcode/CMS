@@ -14,6 +14,7 @@ use Exception;
 use App\Helpdesk\Application\Service\IssueService;
 use App\Common\UI\Controller\THelperController;
 use App\Helpdesk\Application\Query\GetIssues;
+use App\Planing\Application\Query\GetTasksByIssueUuid;
 
 class IssuesController extends AbstractController {
 
@@ -121,6 +122,28 @@ class IssuesController extends AbstractController {
         } catch (Exception $exception) {
             return $this->handleException($exception);
         }
+    }
+
+
+
+    /**
+     * @Route(path="/api/helpdesk/issues/{uuid}/tasks",methods={"GET"},name="helpdesk_issue_tasks")
+     * @param Request $request
+     * @param string  $uuid
+     *
+     * @return JsonResponse
+     */
+    public function getIssueTasks(Request $request, string $uuid): JsonResponse {
+        if (!Uuid::isValid($uuid)) {
+            return $this->json(['error' => 'Issue ID must be a valid string uuid']);
+        }
+        try {
+            $query = new GetTasksByIssueUuid(new Uuid($uuid), $this->getUser());
+            return $this->json(['data' => $this->queryBus->handle($query)], Response::HTTP_OK);
+        } catch (Exception $exception) {
+            return $this->handleException($exception);
+        }
+
     }
 
 }

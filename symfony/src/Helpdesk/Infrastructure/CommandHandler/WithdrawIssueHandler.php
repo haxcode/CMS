@@ -14,6 +14,7 @@ use App\Common\Exception\Access\ObjectAccessException;
 use App\Helpdesk\Domain\Entity\Issue;
 use App\Helpdesk\Domain\Event\IssueWasWithdraw;
 use App\Helpdesk\Application\Command\WithdrawIssue;
+use App\Helpdesk\Domain\Exception\DomainHelpdeskLogicException;
 
 /**
  * Class MarkIssueAsSolvedHandler
@@ -50,6 +51,7 @@ final class WithdrawIssueHandler implements CommandHandler {
      *
      * @throws NotFoundException
      * @throws ObjectAccessException
+     * @throws DomainHelpdeskLogicException
      */
     public function __invoke(WithdrawIssue $cm): void {
         $issue = $this->repository->find($cm->getUuid());

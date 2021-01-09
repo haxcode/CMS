@@ -225,11 +225,11 @@ class Issue {
     }
 
     public function markAsSolved(): void {
-        if ($this->solved == true) {
-            return;
-        }
         if($this->isWithdrawn()){
             throw new DomainHelpdeskLogicException('Can not mark issue as done, because is withdrawn.');
+        }
+        if ($this->solved == true) {
+            return;
         }
         $this->solveDate = new DateTime();
         $this->solved = true;
