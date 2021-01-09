@@ -226,4 +226,18 @@ class Issue {
         $this->solved = true;
     }
 
+    /**
+     * @return bool
+     */
+    public function isSolved(): bool {
+        return $this->solved;
+    }
+
+    /**
+     * @param int $modifier
+     */
+    public function setModifier(int $modifier): void {
+        $this->modifier = $modifier;
+    }
+
 }

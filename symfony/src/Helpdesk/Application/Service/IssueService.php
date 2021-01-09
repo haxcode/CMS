@@ -8,6 +8,8 @@ use App\Common\Service\TServiceParameterValidator;
 use Symfony\Component\Uid\Uuid;
 use App\Helpdesk\Domain\ValueObject\Importance;
 use App\Helpdesk\Application\Command\CreateIssue;
+use App\Helpdesk\Application\Command\MarkIssueAsSolved;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class IssueService {
 
@@ -45,6 +47,21 @@ class IssueService {
 
         return $id;
 
+    }
+
+    /**
+     * @param string        $uuid
+     * @param UserInterface $user
+     *
+     * @return bool
+     */
+    public function solveIssue(string $uuid, UserInterface $user): bool {
+        $uuid = new Uuid($uuid);
+        $command = new MarkIssueAsSolved($uuid, $user);
+
+        $this->commandBus->dispatch($command);
+
+        return true;
     }
 
 }

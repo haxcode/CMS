@@ -51,7 +51,7 @@ class IssuesController extends AbstractController {
             return $this->handleException($exception);
         }
 
-        return $this->json(['issue_id' => $uuid]);
+        return $this->json(['issue_id' => $uuid], Response::HTTP_CREATED);
     }
 
     /**
@@ -70,6 +70,23 @@ class IssuesController extends AbstractController {
         } catch (Exception $exception) {
             return $this->handleException($exception);
         }
+    }
+
+    /**
+     * @Route(path="/api/helpdesk/issues/{uuid}/solved",methods={"PATCH"},name="helpdesk_issue_mark_as_solved")
+     * @param Request $request
+     * @param string  $uuid
+     *
+     * @return JsonResponse
+     */
+    public function solveIssue(Request $request, string $uuid): JsonResponse {
+        try {
+            $result = $this->service->solveIssue($uuid, $this->getUser());
+        } catch (Exception $exception) {
+            return $this->handleException($exception);
+        }
+
+        return $this->json(['success' => $result]);
     }
 
 }
