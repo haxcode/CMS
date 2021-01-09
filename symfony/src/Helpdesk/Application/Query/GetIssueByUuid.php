@@ -4,6 +4,7 @@ namespace App\Helpdesk\Application\Query;
 
 use App\Common\CQRS\Query;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class GetIssueByUuid
@@ -19,15 +20,15 @@ class GetIssueByUuid implements Query {
      * @var Uuid
      */
     private Uuid $uuid;
-    private int  $questioningUser;
+    private UserInterface  $questioningUser;
 
     /**
-     * ClientsListQuery constructor.
+     * GetIssueByUuid constructor.
      *
-     * @param Uuid $uuid
-     * @param int  $questioningUser
+     * @param Uuid          $uuid
+     * @param UserInterface $questioningUser
      */
-    public function __construct(Uuid $uuid, int $questioningUser) {
+    public function __construct(Uuid $uuid, UserInterface $questioningUser) {
 
         $this->uuid = $uuid;
         $this->questioningUser = $questioningUser;
@@ -41,9 +42,9 @@ class GetIssueByUuid implements Query {
     }
 
     /**
-     * @return int
+     * @return UserInterface
      */
-    public function getQuestioningUser(): int {
+    public function getQuestioningUser(): UserInterface {
         return $this->questioningUser;
     }
 

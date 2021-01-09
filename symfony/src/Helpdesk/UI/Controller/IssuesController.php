@@ -12,11 +12,11 @@ use Symfony\Component\Uid\Uuid;
 use App\Helpdesk\Application\Query\GetIssueByUuid;
 use Exception;
 use App\Helpdesk\Application\Service\IssueService;
-use App\Common\UI\Controller\TExceptionController;
+use App\Common\UI\Controller\THelperController;
 
 class IssuesController extends AbstractController {
 
-    use TExceptionController;
+    use THelperController;
 
     /**
      * @var IssueService
@@ -40,13 +40,9 @@ class IssuesController extends AbstractController {
      * @return JsonResponse
      */
     public function createIssue(Request $request): JsonResponse {
-        $data = json_decode($request->getContent(), TRUE);
-        if (!is_array($data)) {
-            return $this->json([
-                'error' => 'Not valid request',
-                'code'  => 400,
-            ], Response::HTTP_BAD_REQUEST);
-
+        $data = $this->decodeRequestData($request);
+        if (!$data) {
+            return $this->riseNotValidBodyException();
         }
         $data['author'] = $this->getUser()->getId();
         try {
@@ -69,10 +65,10 @@ class IssuesController extends AbstractController {
             return $this->json(['error' => 'Issue ID must be a valid string uuid']);
         }
         try {
-            $query = new GetIssueByUuid(new Uuid($uuid), $this->getUser()->getId());
+            $query = new GetIssueByUuid(new Uuid($uuid), $this->getUser());
             return $this->json(['data' => $this->queryBus->handle($query)], Response::HTTP_OK);
         } catch (Exception $exception) {
-            return $this->json(['error' => $exception->getMessage()], $exception->getCode());
+            return $this->handleException($exception);
         }
     }
 
