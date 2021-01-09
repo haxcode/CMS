@@ -10,6 +10,7 @@ use App\Helpdesk\Domain\ValueObject\Importance;
 use App\Helpdesk\Application\Command\CreateIssue;
 use App\Helpdesk\Application\Command\MarkIssueAsSolved;
 use Symfony\Component\Security\Core\User\UserInterface;
+use App\Helpdesk\Application\Command\WithdrawIssue;
 
 class IssueService {
 
@@ -60,6 +61,17 @@ class IssueService {
         $command = new MarkIssueAsSolved($uuid, $user);
 
         $this->commandBus->dispatch($command);
+
+        return true;
+    }
+
+    public function withdrawIssue(string $uuid, UserInterface $user): bool {
+
+        $uuid = new Uuid($uuid);
+        $command = new WithdrawIssue($uuid, $user);
+
+        $this->commandBus->dispatch($command);
+
 
         return true;
     }

@@ -19,3 +19,4 @@ framework:
 
         routing:
             App\Helpdesk\Domain\Event\IssueWasSolved: async
+            App\Helpdesk\Domain\Event\IssueWasWithdraw: async

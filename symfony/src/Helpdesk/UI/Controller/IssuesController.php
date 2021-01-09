@@ -13,6 +13,7 @@ use App\Helpdesk\Application\Query\GetIssueByUuid;
 use Exception;
 use App\Helpdesk\Application\Service\IssueService;
 use App\Common\UI\Controller\THelperController;
+use App\Helpdesk\Application\Query\GetIssues;
 
 class IssuesController extends AbstractController {
 
@@ -87,6 +88,39 @@ class IssuesController extends AbstractController {
         }
 
         return $this->json(['success' => $result]);
+    }
+
+    /**
+     * @Route(path="/api/helpdesk/issues/{uuid}",methods={"DELETE"},name="helpdesk_issue_withdraw")
+     * @param Request $request
+     * @param string  $uuid
+     *
+     * @return JsonResponse
+     */
+    public function withdrawIssue(Request $request, string $uuid): JsonResponse {
+        try {
+            $result = $this->service->withdrawIssue($uuid, $this->getUser());
+        } catch (Exception $exception) {
+            return $this->handleException($exception);
+        }
+
+        return $this->json(['success' => $result]);
+    }
+
+    /**
+     * @Route(path="/api/helpdesk/issues",methods={"GET"},name="helpdesk_issues_list")
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function getIssues(Request $request): JsonResponse {
+
+        try {
+            $query = new GetIssues($this->getUser());
+            return $this->json(['data' => $this->queryBus->handle($query)], Response::HTTP_OK);
+        } catch (Exception $exception) {
+            return $this->handleException($exception);
+        }
     }
 
 }

@@ -7,6 +7,7 @@ use Symfony\Component\Uid\Uuid;
 use App\Client\Domain\Entity\Client;
 use App\Helpdesk\Domain\ValueObject\Importance;
 use DateTime;
+use App\Helpdesk\Domain\Exception\DomainHelpdeskLogicException;
 
 /**
  * @ORM\Entity(repositoryClass="App\Helpdesk\Infrastructure\Repository\IssueRepository")
@@ -82,6 +83,11 @@ class Issue {
      * @ORM\Column(type="uuid", name="component_uuid")
      */
     private Uuid $component;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private bool $withdrawn = false;
 
     public function __construct(Uuid $uuid, Client $client, Uuid $component, string $title, string $description, int $modifier, string $importance = Importance::NORMALLY, bool $confidential = FALSE) {
 
@@ -222,6 +228,9 @@ class Issue {
         if ($this->solved == true) {
             return;
         }
+        if($this->isWithdrawn()){
+            throw new DomainHelpdeskLogicException('Can not mark issue as done, because is withdrawn.');
+        }
         $this->solveDate = new DateTime();
         $this->solved = true;
     }
@@ -238,6 +247,23 @@ class Issue {
      */
     public function setModifier(int $modifier): void {
         $this->modifier = $modifier;
+    }
+
+    /**
+     * @throws DomainHelpdeskLogicException
+     */
+    public function withdraw(): void {
+        if ($this->isSolved()) {
+            throw new DomainHelpdeskLogicException('Can not withdraw issue, because is marked as done.');
+        }
+        $this->withdrawn = true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isWithdrawn(): bool {
+        return $this->withdrawn;
     }
 
 }

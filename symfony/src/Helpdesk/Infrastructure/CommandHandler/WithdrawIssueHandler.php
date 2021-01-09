@@ -12,6 +12,8 @@ use App\User\Security\AccessRoleHelper;
 use App\User\Entity\ValueObject\Role;
 use App\Common\Exception\Access\ObjectAccessException;
 use App\Helpdesk\Domain\Entity\Issue;
+use App\Helpdesk\Domain\Event\IssueWasWithdraw;
+use App\Helpdesk\Application\Command\WithdrawIssue;
 
 /**
  * Class MarkIssueAsSolvedHandler
@@ -21,7 +23,7 @@ use App\Helpdesk\Domain\Entity\Issue;
  * @author           Robert Kubica <rkubica@edokumenty.eu>
  * @copyright (c)    eDokumenty Sp. z o.o.
  */
-final class MarkIssueAsSolvedHandler implements CommandHandler {
+final class WithdrawIssueHandler implements CommandHandler {
 
     /**
      * @var IssueRepository
@@ -32,32 +34,41 @@ final class MarkIssueAsSolvedHandler implements CommandHandler {
      */
     private EventBus $eventBus;
 
+    /**
+     * WithdrawIssueHandler constructor.
+     *
+     * @param IssueRepository $repository
+     * @param EventBus        $eventBus
+     */
     public function __construct(IssueRepository $repository, EventBus $eventBus) {
         $this->repository = $repository;
         $this->eventBus = $eventBus;
     }
 
     /**
-     * @param MarkIssueAsSolved $cm
+     * @param WithdrawIssue $cm
+     *
+     * @throws NotFoundException
+     * @throws ObjectAccessException
      */
-    public function __invoke(MarkIssueAsSolved $cm): void {
+    public function __invoke(WithdrawIssue $cm): void {
         $issue = $this->repository->find($cm->getUuid());
         if (!$issue) {
             throw new NotFoundException('Issue with this uuid not found');
         }
 
-        if (!AccessRoleHelper::hasRole($cm->getUser(), Role::ADMIN) && ($cm->getUser()->getId() != $issue->getAuthor())) {
-            throw new ObjectAccessException(Issue::class, 'Can not mark as solved issue because you are not author of this issue');
+        if (!AccessRoleHelper::hasRole($cm->getUser(), Role::ADMIN)) {
+            throw new ObjectAccessException(Issue::class, 'Can not withdraw issue because you are not administrator');
         }
 
-        if ($issue->isSolved()) {
+        if ($issue->isWithdrawn()) {
             return;
         }
         $issue->setModifier($cm->getUser()->getId());
-        $issue->markAsSolved();
+        $issue->withdraw();
         $this->repository->update($issue);
 
-        $this->eventBus->raise(new IssueWasSolved($issue));
+        $this->eventBus->raise(new IssueWasWithdraw($issue));
 
     }
 
