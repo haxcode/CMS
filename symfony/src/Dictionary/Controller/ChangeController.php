@@ -63,7 +63,7 @@ class ChangeController extends AbstractController {
         try {
             $uuid = new Uuid($uuid);
             $entity = $this->repository->get($uuid);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             return $this->json(['error' => $exception->getMessage()], $exception->getCode());
         }
         return $this->json($entity, Response::HTTP_OK);
@@ -78,7 +78,7 @@ class ChangeController extends AbstractController {
     public function getChangesList(Request $request): JsonResponse {
         try {
             $entities = $this->repository->findAll();
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             return $this->json(['error' => $exception->getMessage()], $exception->getCode());
         }
         return $this->json($entities);
@@ -134,7 +134,7 @@ class ChangeController extends AbstractController {
 
             $this->repository->delete($uuid);
 
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             return $this->json(['error' => $exception->getMessage()], $exception->getCode());
         }
         return $this->json(['result' => 'success'], Response::HTTP_OK);

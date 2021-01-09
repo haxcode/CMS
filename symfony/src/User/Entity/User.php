@@ -113,7 +113,6 @@ class User implements UserInterface {
 
     /**
      * @see UserInterface
-     *
      * @return void
      */
     public function getSalt() {
@@ -122,7 +121,6 @@ class User implements UserInterface {
 
     /**
      * @see UserInterface
-     *
      * @return void
      */
     public function eraseCredentials() {

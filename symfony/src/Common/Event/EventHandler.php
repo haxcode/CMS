@@ -6,7 +6,4 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 interface EventHandler extends MessageHandlerInterface {
 
-    
-
-
 }

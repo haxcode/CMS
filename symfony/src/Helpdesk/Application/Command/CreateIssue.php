@@ -9,13 +9,13 @@ use App\Common\Exception\NotSupportedType;
 
 class CreateIssue implements Command {
 
-    private string $title;
-    private string $description;
-    private int    $author;
-    private ?Uuid  $client;
+    private string     $title;
+    private string     $description;
+    private int        $author;
+    private ?Uuid      $client;
     private Importance $importance;
-    private bool   $confidential;
-    private ?Uuid  $component;
+    private bool       $confidential;
+    private ?Uuid      $component;
     /**
      * @var Uuid
      */
@@ -35,19 +35,17 @@ class CreateIssue implements Command {
      *
      * @throws NotSupportedType
      */
-    public function __construct(Uuid $id,string $title, string $description, string $importance, bool $confidential, int $author, ?Uuid $client, ?Uuid
-    $component) {
+    public function __construct(Uuid $id, string $title, string $description, string $importance, bool $confidential, int $author, ?Uuid $client, ?Uuid $component) {
 
         $this->title = $title;
         $this->description = $description;
         $this->client = $client;
         $this->author = $author;
         $this->importance = new Importance($importance);
-        $this->confidential = $confidential;                                    
+        $this->confidential = $confidential;
         $this->component = $component;
         $this->id = $id;
     }
-
 
     /**
      * @return string

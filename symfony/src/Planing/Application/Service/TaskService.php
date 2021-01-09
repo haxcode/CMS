@@ -9,6 +9,9 @@ use App\Common\Exception\Services\ServiceTypeParameterException;
 use App\Common\CQRS\CommandBus;
 use App\Planing\Application\Command\CreateTask;
 use App\Planing\Domain\Entity\Task;
+use App\Common\Exception\NotSupportedType;
+use App\Common\Exception\Services\ServiceParameterRequiredException;
+use App\Common\Exception\Services\NotSupportedServiceParameterException;
 
 class TaskService {
 
@@ -34,9 +37,9 @@ class TaskService {
      *
      * @return Uuid
      * @throws ServiceTypeParameterException
-     * @throws \App\Common\Exception\Services\NotSupportedServiceParameterException
-     * @throws \App\Common\Exception\Services\ServiceParameterRequiredException
-     * @throws \App\Common\Exception\NotSupportedType
+     * @throws NotSupportedServiceParameterException
+     * @throws ServiceParameterRequiredException
+     * @throws NotSupportedType
      */
     public function createTask(array $data): Uuid {
 

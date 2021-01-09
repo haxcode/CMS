@@ -7,6 +7,8 @@ use Doctrine\Persistence\ManagerRegistry;
 use App\Client\Domain\Entity\Client;
 use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Component\Uid\Uuid;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 
 /**
  * @method Client|null find($id, $lockMode = NULL, $lockVersion = NULL)
@@ -57,8 +59,8 @@ class ClientRepository extends ServiceEntityRepository {
     /**
      * @param Client $client
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
     public function create(Client $client): void {
         $this->_em->persist($client);

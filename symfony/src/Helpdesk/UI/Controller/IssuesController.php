@@ -77,7 +77,7 @@ class IssuesController extends AbstractController {
                 throw new NotFoundException("Issue with specified identity not found");
             }
             return $this->json(['data' => $data], Response::HTTP_OK);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             return $this->json(['error' => $exception->getMessage()], $exception->getCode());
         }
     }

@@ -42,7 +42,7 @@ class IssueService {
         $id = Uuid::v4();
         $command = new CreateIssue($id, $data['title'], $data['description'], new Importance($importance), (bool)$confidential, $data['author'], Uuid::fromString($data['client']), Uuid::fromString($data['component']));
         $this->commandBus->dispatch($command);
-    
+
         return $id;
 
     }

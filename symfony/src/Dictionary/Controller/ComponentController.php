@@ -11,6 +11,7 @@ use Symfony\Component\Uid\Uuid;
 use App\Dictionary\Repository\ComponentRepository;
 use App\Dictionary\Entity\Component;
 use Doctrine\ORM\NonUniqueResultException;
+use Exception;
 
 class ComponentController extends AbstractController {
 
@@ -123,7 +124,7 @@ class ComponentController extends AbstractController {
 
         try {
             $this->repository->delete($uuid);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             return $this->json(['error' => $exception->getMessage()], $exception->getCode());
         }
         return new JsonResponse(NULL, 200);

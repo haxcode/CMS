@@ -114,5 +114,4 @@ class Component {
         $this->is_stable = $is_stable;
     }
 
-   
 }
