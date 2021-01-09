@@ -6,27 +6,26 @@ use Exception;
 use Throwable;
 
 /**
- * Class ServiceTypeParameterException
+ * Class NotSupportedServiceParameterException
  *
  * @package          App\Common\Exception\Services
  * @createDate       2021-01-09
  * @author           Robert Kubica <rkubica@edokumenty.eu>
  * @copyright (c)    eDokumenty Sp. z o.o.
  */
-class ServiceTypeParameterException extends Exception {
+class NotSupportedServiceParameterException extends Exception {
 
     /**
-     * ServiceTypeParameterException constructor.
+     * NotSupportedServiceParameterException constructor.
      *
      * @param string         $service
      * @param string         $parameter
-     * @param string         $type
      * @param int            $code
      * @param string         $message
      * @param Throwable|null $previous
      */
-    public function __construct(string $service, string $parameter, string $type, int $code = 4002, string $message = "", Throwable $previous = null) {
-        parent::__construct(sprintf('Parameter "%s" for service %s must be type of %s. ', $parameter, $service, $type).$message, $code, $previous);
+    public function __construct(string $service, string $parameter, int $code = 4003, string $message = "", Throwable $previous = null) {
+        parent::__construct(sprintf('Parameter "%s" is not supported for service %s.', $parameter, $service).$message, $code, $previous);
     }
 
 }
