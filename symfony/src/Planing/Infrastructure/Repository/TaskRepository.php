@@ -18,4 +18,10 @@ class TaskRepository extends ServiceEntityRepository {
         $this->_em->flush();
     }
 
+    public function update(Task $issue): void {
+        $issue->stampModified();
+        $this->_em->persist($issue);
+        $this->_em->flush();
+    }
+
 }

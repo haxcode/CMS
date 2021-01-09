@@ -12,6 +12,8 @@ use App\Planing\Domain\Entity\Task;
 use App\Common\Exception\NotSupportedType;
 use App\Common\Exception\Services\ServiceParameterRequiredException;
 use App\Common\Exception\Services\NotSupportedServiceParameterException;
+use Symfony\Component\Security\Core\User\UserInterface;
+use App\Planing\Application\Command\UpdateTask;
 
 class TaskService {
 
@@ -77,6 +79,33 @@ class TaskService {
         $this->commandBus->dispatch($command);
 
         return $id;
+    }
+
+    /**
+     * @param array         $data
+     * @param UserInterface $user
+     *
+     * @throws NotSupportedServiceParameterException
+     * @throws ServiceParameterRequiredException
+     * @throws ServiceTypeParameterException
+     */
+    public function updateTask(array $data, UserInterface $user): void {
+        $this->validate($data, [
+            'task_id'        => 'required|uuid',
+            'description'    => 'text',
+            'assigned'       => 'int',
+            'client'         => 'uuid',
+            'state'          => 'text',
+            'related_to'     => 'uuid',
+            'estimated_time' => 'string',
+            'spend_time'     => 'string',
+            'note'           => 'string',
+        ]);
+
+        $command = new UpdateTask($data, $user);
+
+        $this->commandBus->dispatch($command);
+
     }
 
 }

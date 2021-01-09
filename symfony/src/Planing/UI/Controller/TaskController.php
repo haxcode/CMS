@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Planing\Application\Service\TaskService;
 use Exception;
 use App\Common\UI\Controller\THelperController;
+use Symfony\Component\HttpFoundation\Response;
 
 class TaskController extends AbstractController {
 
@@ -48,7 +49,30 @@ class TaskController extends AbstractController {
             return $this->handleException($exception);
         }
 
-        return $this->json(['task_id' => $uuid]);
+        return $this->json(['task_id' => $uuid], Response::HTTP_CREATED);
+    }
+
+    /**
+     * @Route(path="/api/plan/tasks/{uuid}", methods={"PATCH"})
+     * @param Request $request
+     * @param string  $uuid
+     *
+     * @return JsonResponse
+     */
+    public function updateTask(Request $request, string $uuid): JsonResponse {
+        $data = $this->decodeRequestData($request);
+        if (!$data) {
+            return $this->riseNotValidBodyException();
+        }
+
+        $data['task_id'] = $uuid;
+        try {
+            $this->service->updateTask($data, $this->getUser());
+        } catch (Exception $exception) {
+            return $this->handleException($exception);
+        }
+
+        return $this->json([], Response::HTTP_OK);
     }
 
 }

@@ -7,6 +7,7 @@ use Symfony\Component\Uid\Uuid;
 use App\Planing\Infrastructure\Repository\TaskRepository;
 use App\Planing\Domain\ValueObject\Status;
 use DateTime;
+use App\Planing\Domain\Exception\DomainPlaningLogicException;
 
 /**
  * @ORM\Entity(repositoryClass=TaskRepository::class)
@@ -120,10 +121,24 @@ class Task {
     }
 
     /**
+     * @param string $description
+     */
+    public function setDescription(string $description): void {
+        $this->description = $description;
+    }
+
+    /**
      * @return int|null
      */
     public function getAssigned(): ?int {
         return $this->assigned;
+    }
+
+    /**
+     * @param int|null $assigned
+     */
+    public function setAssigned(?int $assigned): void {
+        $this->assigned = $assigned;
     }
 
     /**
@@ -134,10 +149,29 @@ class Task {
     }
 
     /**
+     * @param string $state
+     *
+     * @throws DomainPlaningLogicException
+     */
+    public function setState(string $state): void {
+        $this->state = $state;
+        if ($this->state == Status::DONE) {
+            $this->markAsDone();
+        }
+    }
+
+    /**
      * @return string|null
      */
     public function getClientID(): ?string {
         return $this->clientID;
+    }
+
+    /**
+     * @param string|null $clientID
+     */
+    public function setClientID(?string $clientID): void {
+        $this->clientID = $clientID;
     }
 
     /**
@@ -206,13 +240,34 @@ class Task {
         $this->author = $this->modifier;
     }
 
+    /**
+     * @throws DomainPlaningLogicException
+     */
     public function markAsDone(): void {
+        if ($this->isCanceled()) {
+            throw new DomainPlaningLogicException('Can not mark as done canceled task.');
+        }
         if ($this->done == true) {
             return;
         }
         $this->done = true;
         $this->state = Status::DONE;
         $this->doneDate = new DateTime();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCanceled(): bool {
+        return ($this->state == Status::CANCELED);
+
+    }
+
+    /**
+     * @param int $modifier
+     */
+    public function setModifier(int $modifier): void {
+        $this->modifier = $modifier;
     }
 
 }

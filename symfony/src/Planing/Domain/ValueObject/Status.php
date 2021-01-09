@@ -12,6 +12,7 @@ class Status implements Stringable {
     public const DAILY = 'DAILY';
     public const VERIFICATION = 'VERIFICATION';
     public const DONE = 'DONE';
+    public const CANCELED = 'CANCELED';
     private string $guid;
 
     public function __construct(string $guid = self::BACKLOG) {
@@ -28,6 +29,7 @@ class Status implements Stringable {
             self::DAILY        => 'in progres',
             self::VERIFICATION => 'done - in verification stage',
             self::DONE         => 'done',
+            self::CANCELED     => 'canceled',
         ];
     }
 
@@ -39,6 +41,8 @@ class Status implements Stringable {
     public static function isValid(string $guid): bool {
         return in_array($guid, array_keys(self::getTypes()));
     }
+
+
 
     /**
      * @return string
