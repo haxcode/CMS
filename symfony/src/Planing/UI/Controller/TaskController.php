@@ -14,6 +14,7 @@ use App\Common\CQRS\QueryBus;
 use App\Planing\Application\Query\GetTaskByUuid;
 use Symfony\Component\Uid\Uuid;
 use App\Planing\Application\Query\GetAssignedTasks;
+use App\Planing\Application\Query\GetAuthoredTasks;
 
 class TaskController extends AbstractController {
 
@@ -102,14 +103,30 @@ class TaskController extends AbstractController {
     }
 
     /**
-     * @Route(path="/api/plan/tasks", methods={"GET"})
+     * @Route(path="/api/plan/tasks-assigned", methods={"GET"})
      * @param Request $request
      *
      * @return JsonResponse
      */
-    public function getTasksList(Request $request): JsonResponse {
+    public function getAssignedTasksList(Request $request): JsonResponse {
         try {
             $data = $this->queryBus->handle(new GetAssignedTasks($this->getUser()));
+        } catch (Exception $exception) {
+            return $this->handleException($exception);
+        }
+
+        return $this->json(['data' => $data], Response::HTTP_OK);
+    }
+
+    /**
+     * @Route(path="/api/plan/tasks-authored", methods={"GET"})
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function getAuthoredTasksList(Request $request): JsonResponse {
+        try {
+            $data = $this->queryBus->handle(new GetAuthoredTasks($this->getUser()));
         } catch (Exception $exception) {
             return $this->handleException($exception);
         }
