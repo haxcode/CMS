@@ -19,15 +19,18 @@ class GetIssueByUuid implements Query {
      * @var Uuid
      */
     private Uuid $uuid;
+    private int  $questioningUser;
 
     /**
      * ClientsListQuery constructor.
      *
      * @param Uuid $uuid
+     * @param int  $questioningUser
      */
-    public function __construct(Uuid $uuid) {
+    public function __construct(Uuid $uuid, int $questioningUser) {
 
         $this->uuid = $uuid;
+        $this->questioningUser = $questioningUser;
     }
 
     /**
@@ -35,6 +38,13 @@ class GetIssueByUuid implements Query {
      */
     public function getUuid(): Uuid {
         return $this->uuid;
+    }
+
+    /**
+     * @return int
+     */
+    public function getQuestioningUser(): int {
+        return $this->questioningUser;
     }
 
 }
