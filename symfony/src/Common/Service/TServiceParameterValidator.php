@@ -47,7 +47,6 @@ trait TServiceParameterValidator {
      */
     private function validateRules($data, string $rule, string $alias): void {
         $rules = explode('|', $rule);
-        var_dump($rules);
         if (in_array('required', $rules) && ($data == null)) {
             throw new ServiceParameterRequiredException($this->serviceName, $alias);
         } elseif ($data == NULl) {
