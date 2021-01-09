@@ -5,6 +5,7 @@ namespace App\Common\Service;
 use App\Common\Exception\Services\ServiceParameterRequiredException;
 use App\Common\Exception\Services\ServiceTypeParameterException;
 use Symfony\Component\Uid\Uuid;
+use App\Common\Exception\Services\NotSupportedServiceParameterException;
 
 trait TServiceParameterValidator {
 
@@ -18,15 +19,25 @@ trait TServiceParameterValidator {
      *                            'key4'  => 'required|int
      *                            ]
      * @param array $aliases
+     * @param bool  $strict       if strict then if dataa element not in parameters then exception of type NotSupportedServiceParameterException
+     *
+     * @throws ServiceParameterRequiredException
+     * @throws ServiceTypeParameterException
+     * @throws NotSupportedServiceParameterException
      */
-    public function validate(array $data, array $parameters, array $aliases = []): void {
+    public function validate(array $data, array $parameters, array $aliases = [], bool $strict = TRUE): void {
         foreach ($parameters as $parameter => $validation) {
-            if (isset($data[$parameter])) {
                 $alias = isset($aliases[$parameter]) ? $aliases[$parameter] : $parameter;
                 $value = isset($data[$parameter]) ? $data[$parameter] : NULL;
                 $this->validateRules($value, $validation, $alias);
+        }
+        if ($strict) {
+            $diff = array_diff_key($data, $parameters);
+            foreach ($diff as $key => $value) {
+                throw new NotSupportedServiceParameterException($this->serviceName, $key);
             }
         }
+
     }
 
     /**
@@ -36,8 +47,11 @@ trait TServiceParameterValidator {
      */
     private function validateRules($data, string $rule, string $alias): void {
         $rules = explode('|', $rule);
+        var_dump($rules);
         if (in_array('required', $rules) && ($data == null)) {
             throw new ServiceParameterRequiredException($this->serviceName, $alias);
+        } elseif ($data == NULl) {
+            return;
         }
         if (in_array('text', $rules) && (!is_string($data) || empty($data))) {
             throw new ServiceTypeParameterException($this->serviceName, $alias, 'text');
