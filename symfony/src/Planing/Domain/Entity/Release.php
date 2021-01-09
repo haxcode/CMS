@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 use DateTime;
 use App\Planing\Domain\Exception\DomainPlaningLogicException;
+use App\Planing\Infrastructure\Repository\ReleaseRepository;
 
 /**
  * @ORM\Entity(repositoryClass=ReleaseRepository::class)
