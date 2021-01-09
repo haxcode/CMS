@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Common\CQRS\QueryBus;
 use App\Planing\Application\Query\GetTaskByUuid;
 use Symfony\Component\Uid\Uuid;
+use App\Planing\Application\Query\GetAssignedTasks;
 
 class TaskController extends AbstractController {
 
@@ -93,6 +94,22 @@ class TaskController extends AbstractController {
     public function getTask(Request $request, string $uuid): JsonResponse {
         try {
             $data = $this->queryBus->handle(new GetTaskByUuid(new Uuid($uuid), $this->getUser()));
+        } catch (Exception $exception) {
+            return $this->handleException($exception);
+        }
+
+        return $this->json(['data' => $data], Response::HTTP_OK);
+    }
+
+    /**
+     * @Route(path="/api/plan/tasks", methods={"GET"})
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function getTasksList(Request $request): JsonResponse {
+        try {
+            $data = $this->queryBus->handle(new GetAssignedTasks($this->getUser()));
         } catch (Exception $exception) {
             return $this->handleException($exception);
         }
