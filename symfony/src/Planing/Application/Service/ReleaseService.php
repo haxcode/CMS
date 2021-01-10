@@ -17,6 +17,7 @@ use App\User\Entity\ValueObject\Role;
 use App\Common\Exception\Access\ObjectAccessException;
 use App\Planing\Domain\Entity\Release;
 use DateTime;
+use App\Planing\Application\Command\UpdateRelease;
 
 class ReleaseService {
 
@@ -62,6 +63,30 @@ class ReleaseService {
 
         $this->commandBus->dispatch($command);
         return $uuid;
+
+    }
+
+    /**
+     * @param array         $data
+     * @param UserInterface $user
+     *
+     * @throws NotSupportedServiceParameterException
+     * @throws ObjectAccessException
+     * @throws ServiceParameterRequiredException
+     * @throws ServiceTypeParameterException
+     */
+    public function updateRelease(array $data, UserInterface $user): void {
+        if (!AccessRoleHelper::hasRole($user, Role::ADMIN)) {
+            throw new ObjectAccessException(Release::class, 'Access deny! Only Admin has access to create release.');
+        }
+        $this->validate($data, [
+            'release_id'     => 'uuid',
+            'codename'       => 'text',
+            'planed_release' => 'text',
+            'release_note'   => 'text',
+        ]);
+
+        $this->commandBus->dispatch(new UpdateRelease($data, $user));
 
     }
 

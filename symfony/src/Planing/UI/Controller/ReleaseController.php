@@ -57,6 +57,28 @@ class ReleaseController extends AbstractController {
 
         return $this->json(['release_uuid' => $uuid], Response::HTTP_CREATED);
     }
-    
+
+    /**
+     * @Route(path="/api/plan/release/{uuid}", methods={"PATCH"})
+     * @param Request $request
+     * @param string  $uuid
+     *
+     * @return JsonResponse
+     */
+    public function updateRelease(Request $request, string $uuid): JsonResponse {
+        $data = $this->decodeRequestData($request);
+        if (!$data) {
+            return $this->riseNotValidBodyException();
+        }
+        $data['release_id'] = $uuid;
+        $user = $this->getUser();
+        try {
+            $this->service->updateRelease($data, $user);
+        } catch (Exception $exception) {
+            return $this->handleException($exception);
+        }
+
+        return $this->json([], Response::HTTP_OK);
+    }
 
 }

@@ -117,4 +117,21 @@ class Release {
         return $this->releaseDate;
     }
 
+    /**
+     * @param string|null $codename
+     */
+    public function setCodename(?string $codename): void {
+        $this->codename = $codename;
+    }
+
+    /**
+     * @param DateTime|null $planedRelease
+     */
+    public function setPlanedRelease(?DateTime $planedRelease): void {
+        $this->planedRelease = $planedRelease;
+    }
+
+
+
+    
 }
