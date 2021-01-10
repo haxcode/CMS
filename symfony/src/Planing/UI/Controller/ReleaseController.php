@@ -104,6 +104,25 @@ class ReleaseController extends AbstractController {
     }
 
     /**
+     * @Route(path="/api/plan/releases/{uuid}/release", methods={"PUT"})
+     * @param Request $request
+     * @param string  $uuid
+     *
+     * @return JsonResponse
+     */
+    public function releaseRelease(Request $request, string $uuid): JsonResponse {
+        $user = $this->getUser();
+        try {
+            $this->service->releaseRelease(new Uuid($uuid), $user);
+        } catch (Exception $exception) {
+            return $this->handleException($exception);
+        }
+
+        return $this->json([], Response::HTTP_OK);
+    }
+
+
+    /**
      * @Route(path="/api/plan/releases", methods={"GET"})
      * @param Request $request
      *

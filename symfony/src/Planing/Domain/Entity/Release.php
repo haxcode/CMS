@@ -96,8 +96,11 @@ class Release {
     }
 
     public function release(): void {
-        if (!$this->released && $this->getReleaseNote()) {
+        if (!$this->released && !$this->getReleaseNote()) {
             throw new DomainPlaningLogicException('Can not release version without release-note. Please add release-note.');
+        }
+        if($this->isReleased()){
+            return;
         }
         $this->releaseDate = new DateTime();
         $this->released = true;

@@ -18,6 +18,7 @@ use App\Common\Exception\Access\ObjectAccessException;
 use App\Planing\Domain\Entity\Release;
 use DateTime;
 use App\Planing\Application\Command\UpdateRelease;
+use App\Planing\Application\Command\PublishRelease;
 
 class ReleaseService {
 
@@ -88,6 +89,19 @@ class ReleaseService {
 
         $this->commandBus->dispatch(new UpdateRelease($data, $user));
 
+    }
+
+    /**
+     * @param Uuid $uuid
+     * @param      $user
+     *
+     * @throws ObjectAccessException
+     */
+    public function releaseRelease(Uuid $uuid, $user) {
+        if (!AccessRoleHelper::hasRole($user, Role::ADMIN)) {
+            throw new ObjectAccessException(Release::class, 'Access deny! Only Admin has access to publish release.');
+        }
+        $this->commandBus->dispatch(new PublishRelease($uuid, $user));
     }
 
 }
