@@ -39,7 +39,7 @@ class ReleaseController extends AbstractController {
     }
 
     /**
-     * @Route(path="/api/plan/release", methods={"POST"})
+     * @Route(path="/api/plan/releases", methods={"POST"})
      * @param Request $request
      *
      * @return JsonResponse
@@ -61,7 +61,7 @@ class ReleaseController extends AbstractController {
     }
 
     /**
-     * @Route(path="/api/plan/release/{uuid}", methods={"PATCH"})
+     * @Route(path="/api/plan/releases/{uuid}", methods={"PATCH"})
      * @param Request $request
      * @param string  $uuid
      *
@@ -84,7 +84,7 @@ class ReleaseController extends AbstractController {
     }
 
     /**
-     * @Route(path="/api/plan/release/{uuid}", methods={"GET"})
+     * @Route(path="/api/plan/releases/{uuid}", methods={"GET"})
      * @param Request $request
      * @param string  $uuid
      *
@@ -95,6 +95,25 @@ class ReleaseController extends AbstractController {
         $user = $this->getUser();
         try {
           $result =  $this->queryBus->handle(new GetReleaseByUuid(new Uuid($uuid),$user));
+        } catch (Exception $exception) {
+            return $this->handleException($exception);
+        }
+
+        return $this->json(['data' => $result], Response::HTTP_OK);
+    }
+
+    /**
+     * @Route(path="/api/plan/releases", methods={"GET"})
+     * @param Request $request
+     * @param string  $uuid
+     *
+     * @return JsonResponse
+     */
+    public function getReleases(Request $request, string $uuid): JsonResponse {
+
+        $user = $this->getUser();
+        try {
+            $result =  $this->queryBus->handle(new GetReleaseByUuid(new Uuid($uuid),$user));
         } catch (Exception $exception) {
             return $this->handleException($exception);
         }
