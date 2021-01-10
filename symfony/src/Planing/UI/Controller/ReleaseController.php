@@ -13,6 +13,7 @@ use App\Common\CQRS\QueryBus;
 use App\Planing\Application\Service\ReleaseService;
 use App\Planing\Application\Query\GetReleaseByUuid;
 use Symfony\Component\Uid\Uuid;
+use App\Planing\Application\Query\GetReleases;
 
 class ReleaseController extends AbstractController {
 
@@ -94,7 +95,7 @@ class ReleaseController extends AbstractController {
 
         $user = $this->getUser();
         try {
-          $result =  $this->queryBus->handle(new GetReleaseByUuid(new Uuid($uuid),$user));
+            $result = $this->queryBus->handle(new GetReleaseByUuid(new Uuid($uuid), $user));
         } catch (Exception $exception) {
             return $this->handleException($exception);
         }
@@ -105,15 +106,14 @@ class ReleaseController extends AbstractController {
     /**
      * @Route(path="/api/plan/releases", methods={"GET"})
      * @param Request $request
-     * @param string  $uuid
      *
      * @return JsonResponse
      */
-    public function getReleases(Request $request, string $uuid): JsonResponse {
+    public function getListReleases(Request $request): JsonResponse {
 
         $user = $this->getUser();
         try {
-            $result =  $this->queryBus->handle(new GetReleaseByUuid(new Uuid($uuid),$user));
+            $result = $this->queryBus->handle(new GetReleases($user));
         } catch (Exception $exception) {
             return $this->handleException($exception);
         }
