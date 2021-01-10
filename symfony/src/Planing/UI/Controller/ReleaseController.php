@@ -11,6 +11,8 @@ use App\Common\UI\Controller\THelperController;
 use Symfony\Component\HttpFoundation\Response;
 use App\Common\CQRS\QueryBus;
 use App\Planing\Application\Service\ReleaseService;
+use App\Planing\Application\Query\GetReleaseByUuid;
+use Symfony\Component\Uid\Uuid;
 
 class ReleaseController extends AbstractController {
 
@@ -79,6 +81,25 @@ class ReleaseController extends AbstractController {
         }
 
         return $this->json([], Response::HTTP_OK);
+    }
+
+    /**
+     * @Route(path="/api/plan/release/{uuid}", methods={"GET"})
+     * @param Request $request
+     * @param string  $uuid
+     *
+     * @return JsonResponse
+     */
+    public function getRelease(Request $request, string $uuid): JsonResponse {
+
+        $user = $this->getUser();
+        try {
+          $result =  $this->queryBus->handle(new GetReleaseByUuid(new Uuid($uuid),$user));
+        } catch (Exception $exception) {
+            return $this->handleException($exception);
+        }
+
+        return $this->json(['data' => $result], Response::HTTP_OK);
     }
 
 }
