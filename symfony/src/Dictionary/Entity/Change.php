@@ -35,13 +35,26 @@ class Change {
      * @ORM\Column(name="released")
      */
     private bool $released;
+    /**
+     * @ORM\Column(type="uuid")
+     */
+    private ?Uuid $componentUuid;
+    /**
+     * @ORM\Column(type"uuid")
+     */
+    private ?Uuid $issueUuid;
 
-    public function __construct(Uuid $id, string $excerpt, string $description, string $release = '', bool $released = FALSE) {
+    /**
+     * Change constructor.
+     *
+     * @param Uuid   $id
+     * @param string $excerpt
+     * @param string $description
+     */
+    public function __construct(Uuid $id, string $excerpt, string $description) {
         $this->id = $id;
         $this->excerpt = $excerpt;
         $this->description = $description;
-        $this->release = $release;
-        $this->released = $released;
     }
 
     /**
@@ -87,4 +100,32 @@ class Change {
         return $this->released;
     }
 
+    /**
+     * @return Uuid|null
+     */
+    public function getComponentUuid(): ?Uuid {
+        return $this->componentUuid;
+    }
+
+    /**
+     * @param Uuid|null $componentUuid
+     */
+    public function setComponentUuid(?Uuid $componentUuid): void {
+        $this->componentUuid = $componentUuid;
+    }
+
+    /**
+     * @return Uuid|null
+     */
+    public function getIssueUuid(): ?Uuid {
+        return $this->issueUuid;
+    }
+
+    /**
+     * @param Uuid|null $issueUuid
+     */
+    public function setIssueUuid(?Uuid $issueUuid): void {
+        $this->issueUuid = $issueUuid;
+    }
+    
 }

@@ -93,7 +93,7 @@ class ADRController extends AbstractController {
         }
         $data['uuid'] = $uuid;
         try {
-            $this->service->updateADR($data, $user = $this->getUser());
+            $this->service->updateADR($data, $this->getUser());
         } catch (Exception $exception) {
             return $this->handleException($exception);
         }
