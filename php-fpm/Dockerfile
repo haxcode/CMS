@@ -1,6 +1,5 @@
 FROM alpine:3.12
-
-LABEL maintainer="Vincent Composieux <vincent.composieux@gmail.com>"
+LABEL maintainer="Robert Kubica <robert@kubica.dev>"
 
 RUN apk add --update --repository http://dl-cdn.alpinelinux.org/alpine/edge/community php --no-cache \
     coreutils \
@@ -33,18 +32,14 @@ RUN apk add --update --repository http://dl-cdn.alpinelinux.org/alpine/edge/comm
     php7-xmlwriter \
     make \
     curl
-
 RUN echo "$(curl -sS https://composer.github.io/installer.sig) -" > composer-setup.php.sig \
         && curl -sS https://getcomposer.org/installer | tee composer-setup.php | sha384sum -c composer-setup.php.sig \
         && php composer-setup.php && rm composer-setup.php* \
         && chmod +x composer.phar && mv composer.phar /usr/bin/composer
-
 COPY symfony.ini /etc/php7/conf.d/
 COPY symfony.ini /etc/php7/cli/conf.d/
 COPY xdebug.ini  /etc/php7/conf.d/
-
 COPY symfony.pool.conf /etc/php7/php-fpm.d/
-
 CMD ["php-fpm7", "-F"]
 
 WORKDIR /var/www/symfony
