@@ -27,14 +27,14 @@ class ChangeService {
         $this->validate($data, [
             'excerpt' => 'required|text',
             'description' => 'required|text',
-            ''
-        ]);
+            '//@todo'
+        ]);                        
 
         $uuid = Uuid::v4();
         $change = new Change($uuid, $data['excerpt'], $data['description']);
         
         $this->repository->create($change);
-
+        return $uuid;
     }
 
 

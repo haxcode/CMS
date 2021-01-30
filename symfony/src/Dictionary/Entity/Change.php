@@ -127,5 +127,5 @@ class Change {
     public function setIssueUuid(?Uuid $issueUuid): void {
         $this->issueUuid = $issueUuid;
     }
-    
+        
 }
