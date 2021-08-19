@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdocumentor configVersion="3.0">
+    <paths>
+        <output>docs/reference</output>
+        <cache>docs/cache</cache>
+    </paths>
+    <version number="3.0.0">
+        <api format="php">
+            <source dsn=".">
+                <path>src</path>
+            </source>
+            <extensions>
+                <extension>php</extension>
+                <extension>inc</extension>
+            </extensions>
+            <visibility>public</visibility>
+            <visibility>protected</visibility>
+            <visibility>private</visibility>
+        </api>
+    </version>
+
+</phpdocumentor>
